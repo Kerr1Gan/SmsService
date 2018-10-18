@@ -31,6 +31,7 @@ public class SmsService extends IntentService {
      */
     public SmsService(String name) {
         super(name);
+        Log.i(TAG, "constructor SmsService invoke");
     }
 
     @Override
@@ -64,17 +65,25 @@ public class SmsService extends IntentService {
                         String sendContent = format.format(date) + ":" + sender + "--" + content;
                         Log.i(TAG, "receive content " + sendContent + " ");
                         final com.starwin.ethan.room.SmsMessage smsMessage = new com.starwin.ethan.room.SmsMessage(sender, type, content, format.format(date));
-                        new Thread(new Runnable() {
-                            @Override
-                            public void run() {
-                                smsDao.insertSms(smsMessage);
-                            }
-                        }).start();
+                        smsDao.insertSms(smsMessage);
                     }
+                    smsDatabase.close();
                 }
             }
             Log.i(TAG, "received msg.....");
         }
         Log.i(TAG, "onHandleIntent end");
+    }
+
+    @Override
+    public void onCreate() {
+        super.onCreate();
+        Log.i(TAG, "onCreate");
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        Log.i(TAG, "onDestroy");
     }
 }

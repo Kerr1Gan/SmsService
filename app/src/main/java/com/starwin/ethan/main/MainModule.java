@@ -29,6 +29,10 @@ public class MainModule {
     @Provides
     @Singleton
     AppExecutors provideAppExecutors() {
-        return new AppExecutors();
+        return Inner.sAppExecutors;
+    }
+
+    private static class Inner {
+        private static final AppExecutors sAppExecutors = new AppExecutors();
     }
 }

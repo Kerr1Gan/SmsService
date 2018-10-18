@@ -28,19 +28,13 @@ public class MainActivity extends DaggerMvpActivity<MainComponent, MainActivity>
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        mMainPresenter.init(mSmsDatabase, mAppExecutors);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
         mMainPresenter.takeView(this);
-        mAppExecutors.networkIO().execute(new Runnable() {
-            @Override
-            public void run() {
-                List<SmsMessage> messageList = mSmsDatabase.smsDao().getAllSms();
-                mSmsDatabase.close();
-            }
-        });
     }
 
     @Override
@@ -51,7 +45,7 @@ public class MainActivity extends DaggerMvpActivity<MainComponent, MainActivity>
 
     @Override
     protected void onDestroy() {
-        mSmsDatabase.close();
+        mMainPresenter.destroy();
         super.onDestroy();
     }
 
@@ -63,5 +57,12 @@ public class MainActivity extends DaggerMvpActivity<MainComponent, MainActivity>
     @Override
     protected MainActivity getComponentInject() {
         return this;
+    }
+
+
+    @Override
+    public void notifySmsList(List<SmsMessage> messages) {
+        int x=0;
+        x++;
     }
 }

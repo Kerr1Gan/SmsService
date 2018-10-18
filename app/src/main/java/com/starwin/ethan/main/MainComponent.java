@@ -14,6 +14,8 @@ import dagger.Component;
 @Component(modules = {MainModule.class, ApplicationModule.class})
 public interface MainComponent extends BaseComponent<MainActivity> {
 
+    void inject(MainPresenter presenter);
+
     @Component.Builder
     interface Builder {
 
