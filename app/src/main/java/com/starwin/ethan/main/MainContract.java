@@ -18,5 +18,7 @@ public interface MainContract {
         void refreshSms();
 
         void init(SmsDatabase database, AppExecutors executors);
+
+        void destroy();
     }
 }

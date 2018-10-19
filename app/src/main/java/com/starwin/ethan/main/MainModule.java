@@ -16,8 +16,8 @@ public class MainModule {
 
     @Singleton
     @Provides
-    MainPresenter provideMainPresenter() {
-        return new MainPresenter();
+    MainPresenter provideMainPresenter(Context context) {
+        return new MainPresenter(context);
     }
 
     @Provides

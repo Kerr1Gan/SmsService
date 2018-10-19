@@ -8,9 +8,9 @@ import android.support.annotation.Nullable;
 import android.telephony.SmsMessage;
 import android.util.Log;
 
-import com.starwin.ethan.room.SmsDao;
 import com.starwin.ethan.room.SmsDatabase;
 import com.starwin.ethan.room.SmsRepository;
+import com.starwin.ethan.room.dao.SmsDao;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -18,6 +18,7 @@ import java.util.Locale;
 
 public class SmsService extends IntentService {
 
+    public static final String ACTION_SMS_SERVICE_RECEIVED_MSG = "sms_service_received_msg_action";
     private static final String TAG = "SmsService";
 
     public SmsService() {
@@ -69,6 +70,9 @@ public class SmsService extends IntentService {
                     }
                     smsDatabase.close();
                 }
+                Intent broad = new Intent();
+                broad.setAction(ACTION_SMS_SERVICE_RECEIVED_MSG);
+                this.sendBroadcast(broad);
             }
             Log.i(TAG, "received msg.....");
         }

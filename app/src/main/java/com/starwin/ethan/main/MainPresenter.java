@@ -1,8 +1,14 @@
 package com.starwin.ethan.main;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
+
 import com.starwin.ethan.executor.AppExecutors;
 import com.starwin.ethan.room.SmsDatabase;
 import com.starwin.ethan.room.SmsMessage;
+import com.starwin.ethan.smsservice.SmsService;
 
 import java.util.List;
 
@@ -18,8 +24,21 @@ public class MainPresenter implements MainContract.Presenter {
 
     private SmsDatabase mSmsDatabase;
 
+    private Context mContext;
+
+    private BroadcastReceiver mReceiver;
+
     @Inject
-    public MainPresenter() {
+    public MainPresenter(Context context) {
+        mContext = context;
+        IntentFilter intentFilter = new IntentFilter(SmsService.ACTION_SMS_SERVICE_RECEIVED_MSG);
+        mReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                refreshSms();
+            }
+        };
+        mContext.registerReceiver(mReceiver, intentFilter);
     }
 
     @Override
@@ -57,7 +76,9 @@ public class MainPresenter implements MainContract.Presenter {
         mAppExecutors = executors;
     }
 
+    @Override
     public void destroy() {
         mSmsDatabase.close();
+        mContext.unregisterReceiver(mReceiver);
     }
 }

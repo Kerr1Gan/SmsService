@@ -2,11 +2,15 @@ package com.starwin.ethan.main;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.widget.BaseAdapter;
+import android.widget.ListView;
 
+import com.starwin.ethan.adapter.SmsListAdapter;
 import com.starwin.ethan.executor.AppExecutors;
 import com.starwin.ethan.mvp_dagger.DaggerMvpActivity;
 import com.starwin.ethan.room.SmsDatabase;
 import com.starwin.ethan.room.SmsMessage;
+import com.starwin.ethan.smsservice.R;
 
 import java.util.List;
 
@@ -25,10 +29,16 @@ public class MainActivity extends DaggerMvpActivity<MainComponent, MainActivity>
     @Inject
     SmsDatabase mSmsDatabase;
 
+    private List<SmsMessage> mMessageList;
+
+    private ListView mListView;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
         mMainPresenter.init(mSmsDatabase, mAppExecutors);
+        mListView = findViewById(R.id.list_view);
     }
 
     @Override
@@ -62,7 +72,13 @@ public class MainActivity extends DaggerMvpActivity<MainComponent, MainActivity>
 
     @Override
     public void notifySmsList(List<SmsMessage> messages) {
-        int x=0;
-        x++;
+        if (mMessageList == null) {
+            mMessageList = messages;
+            mListView.setAdapter(new SmsListAdapter(this, mMessageList));
+        } else {
+            mMessageList.clear();
+            mMessageList.addAll(messages);
+        }
+        ((BaseAdapter) mListView.getAdapter()).notifyDataSetChanged();
     }
 }
