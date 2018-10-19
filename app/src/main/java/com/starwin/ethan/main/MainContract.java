@@ -24,5 +24,7 @@ public interface MainContract {
         void destroy();
 
         void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults);
+
+        void go2Setting();
     }
 }

@@ -3,6 +3,8 @@ package com.starwin.ethan.main;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.BaseAdapter;
 import android.widget.ListView;
 
@@ -12,6 +14,7 @@ import com.starwin.ethan.mvp_dagger.DaggerMvpActivity;
 import com.starwin.ethan.room.SmsDatabase;
 import com.starwin.ethan.room.SmsMessage;
 import com.starwin.ethan.smsservice.R;
+import com.starwin.ethan.utils.ActivityUtil;
 
 import java.util.List;
 
@@ -87,5 +90,21 @@ public class MainActivity extends DaggerMvpActivity<MainComponent, MainActivity>
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         mMainPresenter.onRequestPermissionsResult(requestCode, permissions, grantResults);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        menu.clear();
+        getMenuInflater().inflate(R.menu.menu_activity_main, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == R.id.go2setting) {
+            mMainPresenter.go2Setting();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 }

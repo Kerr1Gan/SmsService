@@ -6,9 +6,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
-import android.net.Uri;
-import android.os.Build;
-import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.widget.Toast;
@@ -17,6 +14,7 @@ import com.starwin.ethan.executor.AppExecutors;
 import com.starwin.ethan.room.SmsDatabase;
 import com.starwin.ethan.room.SmsMessage;
 import com.starwin.ethan.smsservice.SmsService;
+import com.starwin.ethan.utils.ActivityUtil;
 
 import java.util.List;
 
@@ -109,16 +107,8 @@ public class MainPresenter implements MainContract.Presenter {
         }
     }
 
-    private void go2Setting() {
-        Intent localIntent = new Intent();
-        localIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        if (Build.VERSION.SDK_INT >= 9) {
-            localIntent.setAction(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
-            localIntent.setData(Uri.fromParts("package", mContext.getPackageName(), null));
-        } else if (Build.VERSION.SDK_INT <= 8) {
-            localIntent.setAction(Intent.ACTION_VIEW);
-            localIntent.setClassName("com.android.settings", "com.android.settings.InstalledAppDetails");
-            localIntent.putExtra("com.android.settings.ApplicationPkgName", mContext.getPackageName());
-        }
+    @Override
+    public void go2Setting() {
+        mContext.startActivity(ActivityUtil.go2PermissionSetting(mContext));
     }
 }
