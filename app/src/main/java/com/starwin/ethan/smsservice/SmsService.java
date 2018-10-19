@@ -57,17 +57,23 @@ public class SmsService extends IntentService {
                         byte[] pdu = (byte[]) pdus[i];
                         messages[i] = SmsMessage.createFromPdu(pdu);
                     }
-                    for (SmsMessage message : messages) {
-                        final String content = message.getMessageBody();// 得到短信内容
-                        final String sender = message.getOriginatingAddress();// 得到发信息的号码
 
-                        final Date date = new Date(message.getTimestampMillis());
-                        final SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
-                        String sendContent = format.format(date) + ":" + sender + "--" + content;
-                        Log.i(TAG, "receive content " + sendContent + " ");
-                        final com.starwin.ethan.room.SmsMessage smsMessage = new com.starwin.ethan.room.SmsMessage(sender, type, content, format.format(date));
-                        smsDao.insertSms(smsMessage);
+                    StringBuilder content = new StringBuilder();// 得到短信内容
+                    String sender = null;
+                    long smsTs = System.currentTimeMillis();
+                    for (SmsMessage message : messages) { // 短信会分段
+                        content.append(message.getMessageBody());// 得到短信内容
+                        sender = message.getOriginatingAddress();// 得到发信息的号码
+                        smsTs = message.getTimestampMillis();
                     }
+                    Date date = new Date(smsTs);
+                    SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
+                    String sendContent = format.format(date) + ":" + sender + "--" + content;
+
+                    com.starwin.ethan.room.SmsMessage smsMessage = new com.starwin.ethan.room.SmsMessage(sender, type, content.toString(), format.format(date));
+                    Log.i(TAG, "receive content " + sendContent + " ");
+
+                    smsDao.insertSms(smsMessage);
                     smsDatabase.close();
                 }
                 Intent broad = new Intent();
