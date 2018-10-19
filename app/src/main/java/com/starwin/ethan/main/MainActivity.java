@@ -1,6 +1,7 @@
 package com.starwin.ethan.main;
 
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.widget.BaseAdapter;
 import android.widget.ListView;
@@ -80,5 +81,11 @@ public class MainActivity extends DaggerMvpActivity<MainComponent, MainActivity>
             mMessageList.addAll(messages);
         }
         ((BaseAdapter) mListView.getAdapter()).notifyDataSetChanged();
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        mMainPresenter.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }
 }

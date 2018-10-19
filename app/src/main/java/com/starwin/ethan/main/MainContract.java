@@ -1,5 +1,7 @@
 package com.starwin.ethan.main;
 
+import android.support.annotation.NonNull;
+
 import com.starwin.ethan.executor.AppExecutors;
 import com.starwin.ethan.mvp_dagger.mvp.IPresenter;
 import com.starwin.ethan.mvp_dagger.mvp.IView;
@@ -20,5 +22,7 @@ public interface MainContract {
         void init(SmsDatabase database, AppExecutors executors);
 
         void destroy();
+
+        void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults);
     }
 }
