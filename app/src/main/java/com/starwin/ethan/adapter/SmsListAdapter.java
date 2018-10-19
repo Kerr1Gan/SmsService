@@ -45,9 +45,11 @@ public class SmsListAdapter extends BaseAdapter {
 
         TextView phone = convertView.findViewById(R.id.phone);
         TextView content = convertView.findViewById(R.id.content);
+        TextView date = convertView.findViewById(R.id.date);
         SmsMessage message = mMessages.get(position);
         phone.setText(message.getPhone());
         content.setText(message.getContent());
+        date.setText(message.getDate());
 
         return convertView;
     }
