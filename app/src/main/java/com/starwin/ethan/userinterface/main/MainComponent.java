@@ -1,4 +1,4 @@
-package com.starwin.ethan.main;
+package com.starwin.ethan.userinterface.main;
 
 import android.app.Application;
 

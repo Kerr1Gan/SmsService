@@ -1,4 +1,4 @@
-package com.starwin.ethan.main;
+package com.starwin.ethan.userinterface.main;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
