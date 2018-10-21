@@ -1,11 +1,16 @@
 package com.starwin.ethan.main;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.BaseAdapter;
+import android.widget.EditText;
 import android.widget.ListView;
 
 import com.starwin.ethan.adapter.SmsListAdapter;
@@ -14,7 +19,6 @@ import com.starwin.ethan.mvp_dagger.DaggerMvpActivity;
 import com.starwin.ethan.room.SmsDatabase;
 import com.starwin.ethan.room.SmsMessage;
 import com.starwin.ethan.smsservice.R;
-import com.starwin.ethan.utils.ActivityUtil;
 
 import java.util.List;
 
@@ -87,6 +91,24 @@ public class MainActivity extends DaggerMvpActivity<MainComponent, MainActivity>
     }
 
     @Override
+    public void showSelfPhoneDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        View view = LayoutInflater.from(this).inflate(R.layout.layout_input_panel, null);
+        final EditText editText = view.findViewById(R.id.edit_text);
+        AlertDialog dialog = builder.setTitle("设置本机号码")
+                .setView(view)
+                .create();
+        dialog.setButton(DialogInterface.BUTTON_POSITIVE, "确定", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                String phone = editText.getText().toString();
+                mMainPresenter.saveSelfPhone(phone, MainActivity.this);
+            }
+        });
+        dialog.show();
+    }
+
+    @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         mMainPresenter.onRequestPermissionsResult(requestCode, permissions, grantResults);
@@ -103,6 +125,10 @@ public class MainActivity extends DaggerMvpActivity<MainComponent, MainActivity>
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.go2setting) {
             mMainPresenter.go2Setting();
+            return true;
+        }
+        if (item.getItemId() == R.id.set_self_phone) {
+            mMainPresenter.setSelfPhone();
             return true;
         }
         return super.onOptionsItemSelected(item);

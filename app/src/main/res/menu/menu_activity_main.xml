@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
+        android:id="@+id/set_self_phone"
+        android:title="设置本机号码" />
+    <item
         android:id="@+id/go2setting"
         android:title="去设置给予短信权限" />
 </menu>

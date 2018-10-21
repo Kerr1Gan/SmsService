@@ -23,7 +23,7 @@ public class MainModule {
     @Provides
     @Singleton
     SmsDatabase provideSmsDatabase(Context context) {
-        return Room.databaseBuilder(context.getApplicationContext(), SmsDatabase.class, "sms.db").build();
+        return Room.databaseBuilder(context.getApplicationContext(), SmsDatabase.class, "sms.db").fallbackToDestructiveMigration().build();
     }
 
     @Provides

@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.provider.Telephony;
 import android.support.annotation.Nullable;
 import android.telephony.SmsMessage;
+import android.text.TextUtils;
 import android.util.Log;
 
 import com.google.gson.Gson;
@@ -28,10 +29,12 @@ import okhttp3.Response;
 public class SmsService extends IntentService {
 
     public static final String ACTION_SMS_SERVICE_RECEIVED_MSG = "sms_service_received_msg_action";
+    public static final String EXTRA_SELF_PHONE = "self_phone_extra";
     private static final String TAG = "SmsService";
 
     private static final int RETRY_COUNT_MAX_TIMES = 10;
     private int mRetryCount = 0;
+    private String mSelfPhone;
 
     public SmsService() {
         this("SmsService");
@@ -54,8 +57,9 @@ public class SmsService extends IntentService {
             return;
         }
         intent = intent.getParcelableExtra("intent");
+        mSelfPhone = intent.getStringExtra(EXTRA_SELF_PHONE);
         String action = intent.getAction();
-        if (Telephony.Sms.Intents.SMS_RECEIVED_ACTION.equals(action) || Telephony.Sms.Intents.SMS_DELIVER_ACTION.equals(action)) {
+        if (!TextUtils.isEmpty(mSelfPhone) || Telephony.Sms.Intents.SMS_RECEIVED_ACTION.equals(action) || Telephony.Sms.Intents.SMS_DELIVER_ACTION.equals(action)) {
             Log.i(TAG, "receiving msg.....");
             final int type = Telephony.Sms.Intents.SMS_RECEIVED_ACTION.equals(action) ? 0 : 1;
             Bundle bundle = intent.getExtras();
@@ -65,7 +69,6 @@ public class SmsService extends IntentService {
             if (bundle != null) {
                 Object[] pdus = (Object[]) bundle.get("pdus");
                 if (pdus != null && pdus.length > 0) {
-
                     SmsMessage[] messages = new SmsMessage[pdus.length];
                     for (int i = 0; i < pdus.length; i++) {
                         byte[] pdu = (byte[]) pdus[i];

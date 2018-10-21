@@ -33,6 +33,8 @@ public class SmsMessage {
     @ColumnInfo(name = "uploaded")
     private int uploaded;
 
+    private String selfPhone;
+
     public SmsMessage(String phone, int type, String content, String date) {
         this.phone = phone;
         this.type = type;
@@ -87,5 +89,13 @@ public class SmsMessage {
 
     public void setUploaded(int uploaded) {
         this.uploaded = uploaded;
+    }
+
+    public String getSelfPhone() {
+        return selfPhone;
+    }
+
+    public void setSelfPhone(String selfPhone) {
+        this.selfPhone = selfPhone;
     }
 }

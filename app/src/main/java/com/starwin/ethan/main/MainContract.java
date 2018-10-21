@@ -1,5 +1,6 @@
 package com.starwin.ethan.main;
 
+import android.content.Context;
 import android.support.annotation.NonNull;
 
 import com.starwin.ethan.executor.AppExecutors;
@@ -14,6 +15,7 @@ public interface MainContract {
 
     interface View extends IView<Presenter> {
         void notifySmsList(List<SmsMessage> messages);
+        void showSelfPhoneDialog();
     }
 
     interface Presenter extends IPresenter<View> {
@@ -26,5 +28,9 @@ public interface MainContract {
         void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults);
 
         void go2Setting();
+
+        void setSelfPhone();
+
+        void saveSelfPhone(String phone, Context context);
     }
 }

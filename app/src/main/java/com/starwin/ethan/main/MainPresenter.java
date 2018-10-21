@@ -111,4 +111,14 @@ public class MainPresenter implements MainContract.Presenter {
     public void go2Setting() {
         mContext.startActivity(ActivityUtil.go2PermissionSetting(mContext));
     }
+
+    @Override
+    public void setSelfPhone() {
+        mView.showSelfPhoneDialog();
+    }
+
+    @Override
+    public void saveSelfPhone(String phone, Context context) {
+        context.getSharedPreferences("pref", Context.MODE_MULTI_PROCESS).edit().putString("self_phone", phone).apply();
+    }
 }
