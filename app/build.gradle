@@ -16,11 +16,46 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+
+    productFlavors {
+        def appId = "com.starwin.ethan.smsservice"
+        smsService {
+            versionCode 1
+            versionName '0.1.0'
+            versionNameSuffix ""
+            applicationId appId
+            resValue('string', 'app_name', 'SmsService')
+            buildConfigField('String', "REST_URL", '\"http://192.168.123.200:8080\"')
+
+            dimension "default"
+        }
+
+        product {
+            resValue('string', 'app_name', 'SmsService')
+            buildConfigField('String', "REST_URL", '\"http://www.fleshapps.com\"')
+
+            dimension "productType"
+        }
+
+        demo { // demo 环境
+            versionCode 50
+            versionNameSuffix "-demo"
+            resValue('string', 'app_name', 'SmsService Demo')
+
+            dimension "productType"
+        }
+
+        flavorDimensions "default", "productType"
+
+    }
 }
 
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation 'com.android.support:appcompat-v7:26.1.0'
+    implementation 'com.squareup.okhttp3:okhttp:3.10.0'
+    implementation 'com.google.code.gson:gson:2.8.5'
+
     testImplementation 'junit:junit:4.12'
 
     annotationProcessor "com.google.dagger:dagger-compiler:2.16"

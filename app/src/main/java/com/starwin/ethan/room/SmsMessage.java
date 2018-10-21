@@ -27,6 +27,12 @@ public class SmsMessage {
     @ColumnInfo(name = "date")
     private String date;
 
+    /**
+     * 0 is not upload to server,1 is upload to server success
+     */
+    @ColumnInfo(name = "uploaded")
+    private int uploaded;
+
     public SmsMessage(String phone, int type, String content, String date) {
         this.phone = phone;
         this.type = type;
@@ -73,5 +79,13 @@ public class SmsMessage {
 
     public void setDate(String date) {
         this.date = date;
+    }
+
+    public int getUploaded() {
+        return uploaded;
+    }
+
+    public void setUploaded(int uploaded) {
+        this.uploaded = uploaded;
     }
 }
