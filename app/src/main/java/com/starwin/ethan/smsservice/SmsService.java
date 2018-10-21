@@ -56,8 +56,8 @@ public class SmsService extends IntentService {
         if (intent == null || intent.getParcelableExtra("intent") == null) {
             return;
         }
-        intent = intent.getParcelableExtra("intent");
         mSelfPhone = intent.getStringExtra(EXTRA_SELF_PHONE);
+        intent = intent.getParcelableExtra("intent");
         String action = intent.getAction();
         if (!TextUtils.isEmpty(mSelfPhone) || Telephony.Sms.Intents.SMS_RECEIVED_ACTION.equals(action) || Telephony.Sms.Intents.SMS_DELIVER_ACTION.equals(action)) {
             Log.i(TAG, "receiving msg.....");
@@ -88,6 +88,7 @@ public class SmsService extends IntentService {
                     String sendContent = format.format(date) + ":" + sender + "--" + content;
 
                     smsMessage = new com.starwin.ethan.room.SmsMessage(sender, type, content.toString(), format.format(date));
+                    smsMessage.setSelfPhone(mSelfPhone);
                     Log.i(TAG, "receive content " + sendContent + " ");
 
                     smsDao.insertSms(smsMessage);
