@@ -16,6 +16,14 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+//    signingConfigs {
+//        release {
+//            keyAlias "${signing_keyAlias}"
+//            keyPassword "${signging_certificatePassword}"
+//            storeFile file("C:\\Users\\KerriGan\\Desktop\\国庆死线\\andres_jarsin\\andres_jarsin\\pinjaman_manggis_new\\${signing_certificate}")
+//            storePassword "${signging_storePassword}"
+//        }
+//    }
 
     productFlavors {
         def appId = "com.starwin.ethan.smsservice"
