@@ -7,7 +7,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
-import com.starwin.ethan.room.SmsMessage;
+import com.starwin.ethan.room.entity.SmsMessage;
 import com.starwin.ethan.smsservice.R;
 
 import java.util.List;

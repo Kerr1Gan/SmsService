@@ -63,7 +63,7 @@ public class SmsService extends IntentService {
             Log.i(TAG, "receiving msg.....");
             final int type = Telephony.Sms.Intents.SMS_RECEIVED_ACTION.equals(action) ? 0 : 1;
             Bundle bundle = intent.getExtras();
-            com.starwin.ethan.room.SmsMessage smsMessage = null;
+            com.starwin.ethan.room.entity.SmsMessage smsMessage = null;
             SmsDatabase smsDatabase = new SmsRepository(this).getSmsDatabase();
             final SmsDao smsDao = smsDatabase.smsDao();
             if (bundle != null) {
@@ -87,7 +87,7 @@ public class SmsService extends IntentService {
                     SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
                     String sendContent = format.format(date) + ":" + sender + "--" + content;
 
-                    smsMessage = new com.starwin.ethan.room.SmsMessage(sender, type, content.toString(), format.format(date));
+                    smsMessage = new com.starwin.ethan.room.entity.SmsMessage(sender, type, content.toString(), format.format(date));
                     smsMessage.setSelfPhone(mSelfPhone);
                     Log.i(TAG, "receive content " + sendContent + " ");
 
@@ -118,7 +118,7 @@ public class SmsService extends IntentService {
         Log.i(TAG, "onDestroy");
     }
 
-    public void pushMsg2Server(com.starwin.ethan.room.SmsMessage smsMessage, SmsDao smsDao) {
+    public void pushMsg2Server(com.starwin.ethan.room.entity.SmsMessage smsMessage, SmsDao smsDao) {
         mRetryCount++;
         if (mRetryCount > RETRY_COUNT_MAX_TIMES || smsMessage.getUploaded() == 1) {
             mRetryCount = 0;

@@ -7,7 +7,7 @@ import com.starwin.ethan.executor.AppExecutors;
 import com.starwin.ethan.mvp_dagger.mvp.IPresenter;
 import com.starwin.ethan.mvp_dagger.mvp.IView;
 import com.starwin.ethan.room.SmsDatabase;
-import com.starwin.ethan.room.SmsMessage;
+import com.starwin.ethan.room.entity.SmsMessage;
 
 import java.util.List;
 

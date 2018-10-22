@@ -17,7 +17,7 @@ import com.starwin.ethan.adapter.SmsListAdapter;
 import com.starwin.ethan.executor.AppExecutors;
 import com.starwin.ethan.mvp_dagger.DaggerMvpActivity;
 import com.starwin.ethan.room.SmsDatabase;
-import com.starwin.ethan.room.SmsMessage;
+import com.starwin.ethan.room.entity.SmsMessage;
 import com.starwin.ethan.smsservice.R;
 
 import java.util.List;

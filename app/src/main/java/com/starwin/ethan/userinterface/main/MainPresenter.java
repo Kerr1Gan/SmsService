@@ -12,7 +12,7 @@ import android.widget.Toast;
 
 import com.starwin.ethan.executor.AppExecutors;
 import com.starwin.ethan.room.SmsDatabase;
-import com.starwin.ethan.room.SmsMessage;
+import com.starwin.ethan.room.entity.SmsMessage;
 import com.starwin.ethan.smsservice.SmsService;
 import com.starwin.ethan.utils.ActivityUtil;
 

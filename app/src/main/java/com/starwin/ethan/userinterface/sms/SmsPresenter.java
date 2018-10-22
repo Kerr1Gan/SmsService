@@ -1,8 +1,12 @@
 package com.starwin.ethan.userinterface.sms;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+import com.starwin.ethan.room.entity.SmsMessage;
 import com.starwin.ethan.smsservice.BuildConfig;
 
 import java.io.IOException;
+import java.util.List;
 
 import javax.inject.Inject;
 
@@ -33,12 +37,12 @@ public class SmsPresenter implements SmsContract.Presenter {
             call.enqueue(new Callback() {
                 @Override
                 public void onFailure(Call call, IOException e) {
-                    int x=0;
-                    x++;
                 }
 
                 @Override
                 public void onResponse(Call call, Response response) throws IOException {
+                    List<SmsMessage> smsMessages = new Gson().fromJson(response.body().string(), new TypeToken<List<SmsMessage>>() {
+                    }.getType());
                     mView.notifyPhoneList();
                 }
             });

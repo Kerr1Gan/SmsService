@@ -6,7 +6,7 @@ import android.arch.persistence.room.OnConflictStrategy;
 import android.arch.persistence.room.Query;
 import android.arch.persistence.room.Update;
 
-import com.starwin.ethan.room.SmsMessage;
+import com.starwin.ethan.room.entity.SmsMessage;
 
 import java.util.List;
 
