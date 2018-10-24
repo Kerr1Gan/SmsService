@@ -2,6 +2,7 @@ package com.starwin.smsservice.controller;
 
 import com.starwin.smsservice.entity.SmsMessage;
 import com.starwin.smsservice.entity.response.CommonResult;
+import com.starwin.smsservice.service.SmsService;
 import com.starwin.smsservice.service.impl.SmsServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -12,7 +13,7 @@ import java.util.List;
 public class SmsController {
 
     @Autowired
-    SmsServiceImpl smsService;
+    SmsService smsService;
 
     @RequestMapping(value = "/sms", method = RequestMethod.GET)
     public CommonResult getSms(@RequestParam(required = false, defaultValue = "0") Integer index,
