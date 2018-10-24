@@ -9,27 +9,24 @@
 </head>
 
 <body>
-<h1>main执行完成后才显示</h1>
-<a class="play" id="audioBtn" style="cursor:pointer;" onclick="audioAutoPlay()">123</a>
-<audio id="bgMusic" src="music.mp3" preload loop="loop"></audio>
-<img src="lol_ym.png"  alt="杨梦" />
+    <h1>main执行完成后才显示</h1>
+    <a class="play" id="audioBtn" style="cursor:pointer;" onclick="audioAutoPlay()">123</a>
+    <audio id="bgMusic" src="music.mp3" preload loop="loop"></audio>
+    <img src="lol_ym.png" alt="杨梦" />
 </body>
 <script type="text/javascript" src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
 <script type="text/javascript">
     function main() {
-        var isWelcome = confirm("Welcome");
-        if (isWelcome) {
+        putData("open page");
+        const name = prompt("请填写你的名字", "ym").toLowerCase();
+        if (name == "yangmeng" || name == "杨梦") {
             alert("123");
         } else {
-            var value = prompt("Prompt message", "default value");
-            if (value != null) {
-                alert(value);
-            }
+            document.body.innerHTML="<h1 style='text-align:center'>不认识你，再见！</h1>";
         }
     }
 
     function audioAutoPlay() {
-        putData();
         var audio = document.getElementById('bgMusic');
         var btn = document.getElementById('audioBtn');
         var isPlay = false;
