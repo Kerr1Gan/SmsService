@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 @Component
 public interface ActionMapper {
 
-    @Insert({"insert into table_action(action, time，extra) values(#{action}, #{time}, #{extra})"})
+    @Insert({"insert into table_action(actions, times,extra) values(#{actions}, #{times}, #{extra})"})
     @Options(useGeneratedKeys = true, keyProperty = "id")
     int insertAction(ActionMessage smsMessage);
 }

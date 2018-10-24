@@ -15,7 +15,7 @@ public class ActionController {
     @Autowired
     ActionService actionService;
 
-    @RequestMapping(value = "/action", method = RequestMethod.PUT)
+    @RequestMapping(value = "/action", method = {RequestMethod.PUT, RequestMethod.POST})
     public CommonResult putAction(@RequestBody ActionMessage actionMessage) {
         int ret = actionService.putActionMessage(actionMessage);
         return new CommonResult<>("0", "success", ret);

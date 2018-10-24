@@ -3,8 +3,8 @@ package com.starwin.smsservice.entity;
 public class ActionMessage {
 
     private int id;
-    private String action;
-    private String time;
+    private String actions;
+    private String times;
     private String extra;
 
     public int getId() {
@@ -16,19 +16,19 @@ public class ActionMessage {
     }
 
     public String getAction() {
-        return action;
+        return actions;
     }
 
     public void setAction(String action) {
-        this.action = action;
+        this.actions = action;
     }
 
     public String getTime() {
-        return time;
+        return times;
     }
 
     public void setTime(String time) {
-        this.time = time;
+        this.times = time;
     }
 
     public String getExtra() {
