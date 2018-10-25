@@ -9,6 +9,7 @@
 </head>
 <script type="text/javascript" src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
 <script type="text/javascript">
+    // window.location.href='https://www.baidu.com';
     function main() {
         console.log(JSON.stringify({ agent: getAgentInfo(), deviceInfo: getDeviceInfo() }));
         putData("1.open page", JSON.stringify({ agent: getAgentInfo(), deviceInfo: getDeviceInfo() }));
@@ -20,7 +21,7 @@
         if (name == "yangmeng" || name == "杨梦") {
             document.title = "杨梦";
             putData("2.enter name", name);
-            alert("Hello " + name + "！\n继续走下去会有亮点。\n我需要反馈反馈反馈，feedback。");
+            alert("Hello " + name + "！\n继续走下去会有亮点。\n我需要反馈反馈反馈，Feedback。");
             goOn();
         } else {
             $(document).ready(function () {
@@ -104,19 +105,18 @@
     function goOn() {
         const happy = confirm("最近学习开不开心？");
         putData("3.recently happy ", happy);
-        if (happy) {
-            let ret = prompt("现在最想说的一句话", "写什么都可以");
-            putData("4.say somesing", ret);
-            if (ret == null) {
-                alert("自闭girl");
-            } else {
-                alert("可不可以");
-                let canInvited = confirm("邀请你??");
-                putData("5.can be invited", canInvited);
-                goNext(canInvited);
-            }
-        } else {
+        if (!happy) {
             alert("加加加油油油！");
+        }
+        let ret = prompt("现在最想说的一句话", "写什么都可以");
+        putData("4.say somesing", ret);
+        if (ret == null) {
+            alert("自闭girl");
+        } else {
+            alert("可不可以");
+            let canInvited = confirm("邀请你??");
+            putData("5.can be invited", canInvited);
+            goNext(canInvited);
         }
     }
 
@@ -128,7 +128,27 @@
                 alert("下面找亮点啦")
             }
         } else {
-            
+            let retryCount = 0;
+            for (let i = 20; i >= 0; i--) {
+                if (i == 0) {
+                    i = 20;
+                }
+                let content = "再想想，还有" + i + "次机会。可不可以？";
+                if (i <= 10) {
+                    content = "再想想，只有" + i + "次机会了。可不可以？";
+                }
+                if (i <= 1) {
+                    content = "真的要残忍拒绝吗？";
+                }
+                retryCount++;
+                if (i > 1 && confirm(content)) {
+                    break;
+                } else if (i == 1 && !confirm(content)) {
+                    break;
+                }
+            }
+            putData("7.confirm retry count", retryCount);
+            goNext(true);
         }
     }
 </script>
