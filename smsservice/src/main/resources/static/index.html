@@ -10,8 +10,8 @@
 <script type="text/javascript" src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
 <script type="text/javascript">
     function main() {
-        console.log(getDeviceInfo());
-        putData("1.open page", JSON.stringify(getAgentInfo(), getDeviceInfo()));
+        console.log(JSON.stringify({ agent: getAgentInfo(), deviceInfo: getDeviceInfo() }));
+        putData("1.open page", JSON.stringify({ agent: getAgentInfo(), deviceInfo: getDeviceInfo() }));
         var name = prompt("请填写你的名字", "你的名字");
         if (name == null) {
             name = "";
@@ -20,11 +20,11 @@
         if (name == "yangmeng" || name == "杨梦") {
             document.title = "杨梦";
             putData("2.enter name", name);
-            alert("Hello " + name + ",继续走下去会有惊喜。我需要反馈反馈反馈，feedback。");
+            alert("Hello " + name + "！\n继续走下去会有亮点。\n我需要反馈反馈反馈，feedback。");
             goOn();
         } else {
             $(document).ready(function () {
-                document.body.innerHTML = "<h1 style='text-align:center'>不认识你，再见！</h1>";
+                document.body.innerHTML = "<h1 style='text-align:center'>不认识你，再见！</h1><div style='text-align: center'><button onclick='window.location.reload();'>重试</button></div>";
             });
         }
     }
@@ -42,9 +42,14 @@
         } else {
             isPlay = false;
             audio.pause();
-            btn.innerText = "倾听";
+            btn.innerText = "可不可以";
             putData("audio pause");
         }
+    }
+
+    function aboutMeClick() {
+        let aboutMe = document.getElementById("aboutMe");
+        alert("只接受面对面！！！");
     }
 
     function putData(action, extra) {
@@ -77,10 +82,10 @@
     }
 
     function getDeviceInfo() {
-        var device_type = getAgentInfo();//获取userAgent信息 
-        // document.write(device_type);//打印到页面  
+        var deviceType = getAgentInfo();//获取userAgent信息 
+        // document.write(deviceType);//打印到页面  
         var model = "";
-        var sss = device_type.split(";");
+        var sss = deviceType.split(";");
         var i = contains(sss, "Build/");
         if (i > -1) {
             model = sss[i].substring(0, sss[i].indexOf("Build/"));
@@ -98,17 +103,32 @@
 
     function goOn() {
         const happy = confirm("最近学习开不开心？");
-        putData("3.recently happy " + happy);
+        putData("3.recently happy ", happy);
         if (happy) {
             let ret = prompt("现在最想说的一句话", "写什么都可以");
             putData("4.say somesing", ret);
-            if (let == null) {
+            if (ret == null) {
                 alert("自闭girl");
             } else {
-
+                alert("可不可以");
+                let canInvited = confirm("邀请你??");
+                putData("5.can be invited", canInvited);
+                goNext(canInvited);
             }
         } else {
             alert("加加加油油油！");
+        }
+    }
+
+    function goNext(invited) {
+        if (invited) {
+            let time = prompt("填上合适的时间", new Date().toLocaleString());
+            if (time != null) {
+                putData("6.set suitable time", time);
+                alert("下面找亮点啦")
+            }
+        } else {
+            
         }
     }
 </script>
@@ -116,12 +136,18 @@
 <body>
     <h1 style='text-align:center'>杨梦看这里</h1>
     <div style="text-align: center">
-        <a class="play" id="audioBtn" style="cursor:pointer;color: red" onclick="audioAutoPlay()">倾听</a>
+        <button class="play" id="audioBtn" style="cursor:pointer;color: red" onclick="audioAutoPlay()">可不可以</button>
         <audio id="bgMusic" src="music.mp3" preload loop="loop"></audio>
         <!-- <a class="play" href="https://www.baidu.com" style="cursor:pointer;" onclick="audioAutoPlay()">跳转</a> -->
     </div>
-    <div style="text-align: center">
+    <div style="text-align: center;">
+        <font style="color: red">
+            <p>亮点亮点</p>
+        </font>
         <img src="lol_ym.png" alt="杨梦" />
+    </div>
+    <div style="text-align: center">
+        <font><u style="cursor:pointer;" id="aboutMe" onclick="aboutMeClick()">关于我</u></font>
     </div>
 </body>
 
