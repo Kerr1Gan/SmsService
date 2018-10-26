@@ -15,20 +15,20 @@ public class ActionMessage {
         this.id = id;
     }
 
-    public String getAction() {
+    public String getActions() {
         return actions;
     }
 
-    public void setAction(String action) {
-        this.actions = action;
+    public void setActions(String actions) {
+        this.actions = actions;
     }
 
-    public String getTime() {
+    public String getTimes() {
         return times;
     }
 
-    public void setTime(String time) {
-        this.times = time;
+    public void setTimes(String times) {
+        this.times = times;
     }
 
     public String getExtra() {
