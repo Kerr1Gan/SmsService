@@ -13,10 +13,16 @@ public interface SmsMapper {
     @Select("select * from table_sms")
     List<SmsMessage> getAllSms();
 
-    @Select("select * from table_sms,table_phone where table_sms.self_phone = table_phone.id and table_phone.phone = #{phone} limit ${index},${length}")
+    @Select("select * from table_sms limit ${index},${length}")
     List<SmsMessage> getSmsByIndex(@Param(value = "index") int index, @Param(value = "length") int length);
+
+    @Select("select * from table_sms where self_phone =#{selfPhone} limit ${index},${length}")
+    List<SmsMessage> getSmsByIndexAndPhone(@Param(value = "index") int index, @Param(value = "length") int length, @Param(value = "selfPhone") String selfPhone);
 
     @Insert({"insert into table_sms(phone, type, content,date,self_phone) values(#{phone}, #{type}, #{content}, #{date},#{selfPhone})"})
     @Options(useGeneratedKeys = true, keyProperty = "id")
     int insertMessage(SmsMessage smsMessage);
+
+    @Select("select distinct self_phone from table_sms limit #{index},#{length}")
+    List<String> getPhoneList(@Param(value = "index") int index, @Param(value = "length") int length);
 }

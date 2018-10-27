@@ -22,12 +22,21 @@ public class SmsServiceImpl implements SmsService {
     }
 
     @Override
-    public List<SmsMessage> getSmsMessagesByIndex(int index, int length) {
-        return mapper.getSmsByIndex(index, length);
+    public List<SmsMessage> getSmsMessagesByIndex(int index, int length, String selfPhone) {
+        if (selfPhone.length() > 0) {
+            return mapper.getSmsByIndexAndPhone(index, length, selfPhone);
+        } else {
+            return mapper.getSmsByIndex(index, length);
+        }
     }
 
     @Override
     public int putSmsMessage(SmsMessage smsMessage) {
         return mapper.insertMessage(smsMessage);
+    }
+
+    @Override
+    public List<String> getPhoneList(int index, int length) {
+        return mapper.getPhoneList(index, length);
     }
 }
