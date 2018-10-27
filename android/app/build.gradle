@@ -74,6 +74,7 @@ dependencies {
     implementation project(':mvp-dagger')
 
     api 'com.tencent.bugly:crashreport:latest.release'
-    implementation 'com.google.firebase:firebase-core:16.0.1'
+//    implementation 'com.google.firebase:firebase-core:16.0.1'
+    implementation 'com.google.firebase:firebase-ads:11.4.0'
 }
-apply plugin: 'com.google.gms.google-services'
+//apply plugin: 'com.google.gms.google-services'
