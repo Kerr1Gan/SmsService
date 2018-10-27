@@ -33,7 +33,7 @@ android {
             versionNameSuffix ""
             applicationId appId
             resValue('string', 'app_name', 'SmsService')
-            buildConfigField('String', "REST_URL", '\"http://192.168.123.200:8080\"')
+            buildConfigField('String', "REST_URL", '\"http://192.168.123.59:8080\"')
 
             dimension "default"
         }

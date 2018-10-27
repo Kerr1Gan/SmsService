@@ -14,7 +14,7 @@ public abstract class DaggerMvpActivity<T extends BaseComponent<Y>, Y> extends A
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mDaggerComponent = initDaggerComponent();
-        if (mDaggerComponent != null) {
+        if (mDaggerComponent != null && getComponentInject() != null) {
             getDaggerComponent().inject(getComponentInject());
         }
     }

@@ -7,7 +7,7 @@ public class SmsContract {
 
     interface View extends IView<SmsContract.Presenter> {
 
-        void notifyPhoneList();
+        void notifyPhoneList(String[] phone);
     }
 
     interface Presenter extends IPresenter<SmsContract.View> {

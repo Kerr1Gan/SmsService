@@ -9,7 +9,7 @@ public abstract class SmsModule {
     @Binds
     abstract SmsContract.Presenter provideSmsPresenter(SmsPresenter smsPresenter);
 
-    static SmsPresenter provideSmsPresenteImplr() {
+    static SmsPresenter provideSmsPresenteImpl() {
         return new SmsPresenter();
     }
 }

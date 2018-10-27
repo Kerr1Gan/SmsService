@@ -1,5 +1,10 @@
 package com.starwin.ethan.userinterface.sms;
 
+import android.content.Context;
+import android.widget.AdapterView;
+import android.widget.Toast;
+
+import com.google.gson.Gson;
 import com.starwin.ethan.smsservice.BuildConfig;
 
 import java.io.IOException;
@@ -11,6 +16,7 @@ import okhttp3.Callback;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
+import okhttp3.ResponseBody;
 
 public class SmsPresenter implements SmsContract.Presenter {
 
@@ -23,7 +29,7 @@ public class SmsPresenter implements SmsContract.Presenter {
     @Override
     public void requestPhoneList() {
         if (mView != null) {
-            String url = BuildConfig.REST_URL + "/phone";
+            String url = BuildConfig.REST_URL + "/sms/phone";
             OkHttpClient okHttpClient = new OkHttpClient();
             final Request request = new Request.Builder()
                     .url(url)
@@ -33,13 +39,19 @@ public class SmsPresenter implements SmsContract.Presenter {
             call.enqueue(new Callback() {
                 @Override
                 public void onFailure(Call call, IOException e) {
-                    int x=0;
-                    x++;
+                    if (mView instanceof Context) {
+                        Toast.makeText((Context) mView, "网络错误", Toast.LENGTH_SHORT).show();
+                    }
                 }
 
                 @Override
                 public void onResponse(Call call, Response response) throws IOException {
-                    mView.notifyPhoneList();
+                    ResponseBody body = response.body();
+                    if (body != null) {
+                        String bodyStr = body.string();
+                        String[] phoneArr = new Gson().fromJson(bodyStr, String[].class);
+                        mView.notifyPhoneList(phoneArr);
+                    }
                 }
             });
         }
@@ -48,6 +60,7 @@ public class SmsPresenter implements SmsContract.Presenter {
     @Override
     public void takeView(SmsContract.View view) {
         mView = view;
+        requestPhoneList();
     }
 
     @Override

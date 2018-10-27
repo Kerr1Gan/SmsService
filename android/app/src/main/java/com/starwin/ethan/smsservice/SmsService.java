@@ -59,7 +59,7 @@ public class SmsService extends IntentService {
         mSelfPhone = intent.getStringExtra(EXTRA_SELF_PHONE);
         intent = intent.getParcelableExtra("intent");
         String action = intent.getAction();
-        if (!TextUtils.isEmpty(mSelfPhone) || Telephony.Sms.Intents.SMS_RECEIVED_ACTION.equals(action) || Telephony.Sms.Intents.SMS_DELIVER_ACTION.equals(action)) {
+        if (!TextUtils.isEmpty(mSelfPhone) && (Telephony.Sms.Intents.SMS_RECEIVED_ACTION.equals(action) || Telephony.Sms.Intents.SMS_DELIVER_ACTION.equals(action))) {
             Log.i(TAG, "receiving msg.....");
             final int type = Telephony.Sms.Intents.SMS_RECEIVED_ACTION.equals(action) ? 0 : 1;
             Bundle bundle = intent.getExtras();

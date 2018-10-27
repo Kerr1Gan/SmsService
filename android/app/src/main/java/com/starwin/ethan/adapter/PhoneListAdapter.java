@@ -7,7 +7,6 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
-import com.starwin.ethan.room.SmsMessage;
 import com.starwin.ethan.smsservice.R;
 
 import java.util.List;
@@ -15,21 +14,21 @@ import java.util.List;
 public class PhoneListAdapter extends BaseAdapter {
 
     private Context mContext;
-    private List<SmsMessage> mMessages;
+    private List<String> mPhoneList;
 
-    public PhoneListAdapter(Context context, List<SmsMessage> messages) {
+    public PhoneListAdapter(Context context, List<String> messages) {
         mContext = context;
-        mMessages = messages;
+        mPhoneList = messages;
     }
 
     @Override
     public int getCount() {
-        return mMessages.size();
+        return mPhoneList.size();
     }
 
     @Override
     public Object getItem(int position) {
-        return mMessages.get(position);
+        return mPhoneList.get(position);
     }
 
     @Override
@@ -44,13 +43,8 @@ public class PhoneListAdapter extends BaseAdapter {
         }
 
         TextView phone = convertView.findViewById(R.id.phone);
-        TextView content = convertView.findViewById(R.id.content);
-        TextView date = convertView.findViewById(R.id.date);
-        SmsMessage message = mMessages.get(position);
-        phone.setText(message.getPhone());
-        content.setText(message.getContent());
-        date.setText(message.getDate());
-
+        String phoneStr = mPhoneList.get(position);
+        phone.setText(phoneStr);
         return convertView;
     }
 }
