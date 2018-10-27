@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.widget.BaseAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
@@ -29,6 +30,8 @@ public class SmsDetailActivity extends DaggerMvpActivity<SmsComponent, SmsActivi
     @Inject
     SmsDetailContract.Presenter mPresenter;
 
+    private SwipeRefreshLayout mRefreshLayout;
+
     public static Intent newIntent(Context context, String phone) {
         Intent intent = new Intent(context, SmsDetailActivity.class);
         intent.putExtra(EXTRA_PHONE_NUMBER, phone);
@@ -41,6 +44,13 @@ public class SmsDetailActivity extends DaggerMvpActivity<SmsComponent, SmsActivi
         setContentView(R.layout.activity_sms_detail);
         mListView = findViewById(R.id.list_view);
         mListView.setAdapter(new SmsListAdapter(this, mMessageList));
+        mRefreshLayout = findViewById(R.id.swipe_refresh);
+        mRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                mPresenter.requestSmsList();
+            }
+        });
     }
 
     @Override
@@ -64,6 +74,7 @@ public class SmsDetailActivity extends DaggerMvpActivity<SmsComponent, SmsActivi
     @Override
     protected void onResume() {
         super.onResume();
+        mRefreshLayout.setRefreshing(true);
         mPresenter.takeView(this);
     }
 
@@ -78,6 +89,7 @@ public class SmsDetailActivity extends DaggerMvpActivity<SmsComponent, SmsActivi
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
+                mRefreshLayout.setRefreshing(false);
                 mMessageList.clear();
                 mMessageList.addAll(smsMessages);
                 ((BaseAdapter) mListView.getAdapter()).notifyDataSetChanged();
@@ -87,6 +99,7 @@ public class SmsDetailActivity extends DaggerMvpActivity<SmsComponent, SmsActivi
 
     @Override
     public void toast(final String message) {
+        mRefreshLayout.setRefreshing(false);
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
