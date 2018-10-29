@@ -12,6 +12,7 @@
     <title>可不可以</title>
 </head>
 <script type="text/javascript" src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
+<script type="text/javascript" src="https://unpkg.com/vue/dist/vue.js"></script>
 <script type="text/javascript">
     // window.location.href='https://www.baidu.com';
     function main() {
@@ -158,24 +159,42 @@
             goNext(true);
         }
     }
+
+
 </script>
 
 <body>
-    <h1 style='text-align:center'>杨梦看这里</h1>
-    <div style="text-align: center">
-        <button class="play" id="audioBtn" style="cursor:pointer;color: red" onclick="audioAutoPlay()">可不可以</button>
-        <audio id="bgMusic" src="music.mp3" preload loop="loop"></audio>
-        <!-- <a class="play" href="https://www.baidu.com" style="cursor:pointer;" onclick="audioAutoPlay()">跳转</a> -->
-    </div>
-    <div style="text-align: center;">
-        <font style="color: red">
-            <p>亮点亮点</p>
-        </font>
-        <img src="lol_ym.png" alt="杨梦" />
-    </div>
-    <div style="text-align: center">
-        <font><u style="cursor:pointer;" id="aboutMe" onclick="aboutMeClick()">关于我</u></font>
+    <div id="app">
+        <h1 style='text-align:center'>{{title}}</h1>
+        <div style="text-align: center">
+            <button class="play" id="audioBtn" style="cursor:pointer;color: red" onclick="audioAutoPlay()">可不可以</button>
+            <audio id="bgMusic" src="music.mp3" preload loop="loop"></audio>
+            <!-- <a class="play" href="https://www.baidu.com" style="cursor:pointer;" onclick="audioAutoPlay()">跳转</a> -->
+        </div>
+        <div style="text-align: center;">
+            <font style="color: red">
+                <p>亮点亮点</p>
+            </font>
+            <img src="lol_ym.png" alt="杨梦" />
+        </div>
+        <div style="text-align: center">
+            <font><u style="cursor:pointer;" id="aboutMe" onclick="aboutMeClick()">关于我</u></font>
+        </div>
     </div>
 </body>
+
+<script>
+    let vm = new Vue({
+        el: '#app',
+        data: {
+            title: "杨梦看这里"
+        },
+        methods: {
+            details: function () {
+                return this.site + " - 学的不仅是技术，更是梦想！";
+            }
+        }
+    })
+</script>
 
 </html>
