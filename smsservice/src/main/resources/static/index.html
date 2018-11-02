@@ -35,7 +35,7 @@
             });
         }
     }
-    main();
+    // main();
 
     function audioAutoPlay() {
         var audio = document.getElementById('bgMusic');
@@ -163,38 +163,66 @@
 
 </script>
 
-<body>
+<body style="background-color: #333333">
     <div id="app">
-        <h1 style='text-align:center'>{{title}}</h1>
-        <div style="text-align: center">
-            <button class="play" id="audioBtn" style="cursor:pointer;color: red" onclick="audioAutoPlay()">可不可以</button>
-            <audio id="bgMusic" src="music.mp3" preload loop="loop"></audio>
-            <!-- <a class="play" href="https://www.baidu.com" style="cursor:pointer;" onclick="audioAutoPlay()">跳转</a> -->
+        <div id="top">
+            <h1 style='text-align:center;color:white'>倒计时：{{offsetTime}}秒</h1>
+            <div style="text-align: center">
+                <button v-on:click="onClick">我有答案</button>
+            </div>
         </div>
-        <div style="text-align: center;">
-            <font style="color: red">
-                <p>亮点亮点</p>
-            </font>
-            <img src="lol_ym.png" alt="杨梦" />
-        </div>
-        <div style="text-align: center">
-            <font><u style="cursor:pointer;" id="aboutMe" onclick="aboutMeClick()">关于我</u></font>
+        <div id="content" style="display: none;">
+            <h1 style='text-align:center'>{{title}}</h1>
+            <div style="text-align: center">
+                <button class="play" id="audioBtn" style="cursor:pointer;color: red" onclick="audioAutoPlay()">可不可以</button>
+                <audio id="bgMusic" src="music.mp3" preload loop="loop"></audio>
+                <!-- <a class="play" href="https://www.baidu.com" style="cursor:pointer;" onclick="audioAutoPlay()">跳转</a> -->
+            </div>
+            <div style="text-align: center;">
+                <font style="color: red">
+                    <p>亮点亮点</p>
+                </font>
+                <img src="lol_ym.png" alt="杨梦" />
+            </div>
+            <div style="text-align: center">
+                <font><u style="cursor:pointer;" id="aboutMe" onclick="aboutMeClick()">关于我</u></font>
+            </div>
         </div>
     </div>
 </body>
 
 <script>
+    'use-strict'
     let vm = new Vue({
         el: '#app',
         data: {
-            title: "杨梦看这里"
+            title: "杨梦看这里",
+            time: new Date()
         },
         methods: {
-            details: function () {
-                return this.site + " - 学的不仅是技术，更是梦想！";
+            onClick: function () {
+                document.getElementById("top").style.display = 'none';
+                main();
+                if (document.getElementById("content") != null) {
+                    document.body.style.backgroundColor = "#ffffff";
+                    document.getElementById("content").style.display = 'block';
+                }
+            }
+        },
+        computed: {
+            offsetTime: {
+                get: function () {
+                    let date = new Date("2018/11/03 12:00:00");
+                    return parseInt(Number((date - this.time) / 1000));
+                },
+                set: function (value) {
+                    this.time = value;
+                }
             }
         }
     })
+
+    let flag = setInterval(() => { vm.offsetTime = new Date() }, 1000)
 </script>
 
 </html>
