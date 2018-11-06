@@ -123,7 +123,7 @@
     }
 
     function goOn() {
-
+        syncProgress();
     }
 
     function goNext(invited) {
@@ -282,27 +282,27 @@
         </div> -->
         <div id="content" style="display: none;">
             <div style="float: left;">海洋馆：</div>
-            <div class="progress progress-striped active" v-on:click="progressBarClick(0)">
+            <div class="progress progress-striped active" v-on:click="progressBarClick(0)" style="margin-right: 10px;">
                 <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"
-                    style="width: 40%;">
+                    v-bind:style="{width:maxProgress(value1)+'%'}">
                     <span class="sr-only">40% 完成</span>
-                    <span>命中100次</span>
+                    <span>命中{{value1}}次</span>
                 </div>
             </div>
             <div style="float: left;">动物园：</div>
-            <div class="progress progress-striped active" v-on:click="progressBarClick(1)">
+            <div class="progress progress-striped active" v-on:click="progressBarClick(1)" style="margin-right: 10px;">
                 <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"
-                    style="width: 40%;background-color: orange">
+                    style="background-color: orange" v-bind:style="{width:maxProgress(value2)+'%'}">
                     <span class="sr-only">40% 完成</span>
-                    <span>命中100次</span>
+                    <span>命中{{value2}}次</span>
                 </div>
             </div>
             <div style="float: left;">新天地：</div>
-            <div class="progress progress-striped active" v-on:click="progressBarClick(2)">
+            <div class="progress progress-striped active" v-on:click="progressBarClick(2)" style="margin-right: 10px;">
                 <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"
-                    style="width: 60%;background-color: dodgerblue">
+                    style="background-color: dodgerblue" v-bind:style="{width:maxProgress(value3)+'%'}">
                     <span class="sr-only">40% 完成</span>
-                    <span>命中100次</span>
+                    <span>命中{{value3}}次</span>
                 </div>
             </div>
         </div>
@@ -372,29 +372,63 @@
         data: {
             title: "杨梦看这里",
             time: new Date(),
-            tag: "维护中。。。"
+            tag: "维护中。。。",
+            value1: "",
+            value2: "",
+            value3: ""
         },
         methods: {
             onClick: function () {
+                clearInterval(flag);
                 document.getElementById("top").style.display = 'none';
                 main();
             },
             progressBarClick: function (index) {
                 let name = "";
+                let value = 0;
                 switch (index) {
                     case 0:
                         name = "海洋馆";
+                        value = this.value1;
                         break;
                     case 1:
                         name = "动物园";
+                        value = this.value2;
                         break;
                     case 2:
                         name = "新天地";
+                        value = this.value3;
                         break;
                 }
+                let key = "value" + (index + 1);
                 getBootstrapMessage("主观增加次数", "给" + name + "选项增加10次", "不要", "确定", function (index, dialog) {
+                    if (index == 1) {
+                        $.ajax({
+                            type: "PUT",
+                            url: "/value?key=" + key + "&value=" + (parseInt(value) + 10),
+                            contentType: "charset=utf-8",
+                            dataType: "json",
+                            success: function (result) {
+                                console.log("success " + JSON.stringify(result));
+                                syncProgress();
+                            },
+                            error: function (error) {
+                                console.log("error " + error);
+                            }
+                        });
+                    }
                     dialog.modal("hide");
                 }).modal("show");
+            },
+            maxProgress: function (times) {
+                let array = [this.value1, this.value2, this.value3];
+                let max = this.value1;
+                for (val of array) {
+                    if (max < val) {
+                        max = val;
+                    }
+                }
+                return parseInt((times / (max * 2 * 2 / 3)) * 100);
             }
         },
         computed: {
@@ -416,18 +450,51 @@
     })
 
     let flag = setInterval(() => { vm.offsetTime = new Date() }, 1000)
-    $.ajax({
-        type: "GET",
-        url: "/value",
-        contentType: "application/json;charset=utf-8",
-        dataType: "json",
-        success: function (result) {
-            console.log("success " + result);
-        },
-        error: function (error) {
-            console.log("error " + error);
-        }
-    });
+    setInterval(() => {
+        syncProgress();
+    }, 10 * 1000)
+
+    function syncProgress() {
+        $.ajax({
+            type: "GET",
+            url: "/value?key=value1",
+            contentType: "charset=utf-8",
+            dataType: "json",
+            success: function (result) {
+                console.log("success " + JSON.stringify(result));
+                vm.value1 = result.data.value;
+            },
+            error: function (error) {
+                console.log("error " + error);
+            }
+        });
+        $.ajax({
+            type: "GET",
+            url: "/value?key=value2",
+            contentType: "charset=utf-8",
+            dataType: "json",
+            success: function (result) {
+                console.log("success " + JSON.stringify(result));
+                vm.value2 = result.data.value;
+            },
+            error: function (error) {
+                console.log("error " + error);
+            }
+        });
+        $.ajax({
+            type: "GET",
+            url: "/value?key=value3",
+            contentType: "charset=utf-8",
+            dataType: "json",
+            success: function (result) {
+                console.log("success " + JSON.stringify(result));
+                vm.value3 = result.data.value;
+            },
+            error: function (error) {
+                console.log("error " + error);
+            }
+        });
+    }
 </script>
 
 </html>
