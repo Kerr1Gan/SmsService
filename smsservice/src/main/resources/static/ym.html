@@ -176,6 +176,18 @@
         return $("#messageModal");
     }
 
+    function getBootstrapInput(title, content, textNegative, textPositive) {
+        title = title || "模态框（Modal）标题";
+        content = content || "在这里添加一些文本";
+        textNegative = textNegative || "关闭";
+        textPositive = textPositive || "提交更改";
+        $("#inputModalLabel").text(title);
+        $("#inputModalContent").text(content);
+        $("#btnNegative").text(textNegative);
+        $("#btnPositive").text(textPositive);
+        return $("#inputModal");
+    }
+
 </script>
 
 <body style="background-color: #333333">
@@ -218,8 +230,26 @@
                     <h4 class="modal-title" id="messageModalLabel">模态框（Modal）标题</h4>
                 </div>
                 <div class="modal-body" id="messageModalContent">在这里添加一些文本</div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal" id="btnNegative">关闭</button>
+                    <button type="button" class="btn btn-primary" id="btnPositive">提交更改</button>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal -->
+    </div>
+
+    <!-- Input模态框（Modal） -->
+    <div class="modal fade" id="inputModal" tabindex="-1" data-backdrop="static" role="dialog" aria-labelledby="inputModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title" id="inputModalLabel">模态框（Modal）标题</h4>
+                </div>
+                <div class="modal-body" id="inputModalContent">在这里添加一些文本</div>
                 <div style="margin-left: 10px; margin-right: 10px;">
-                    <input type="text" class="form-control" placeholder="你的名字">
+                    <input type="text" class="form-control" placeholder="你的名字" id="input">
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal" id="btnNegative">关闭</button>
@@ -263,7 +293,7 @@
     })
 
     let flag = setInterval(() => { vm.offsetTime = new Date() }, 1000)
-    let dlg = getBootstrapMessage("哈喽","只允许一个人进入");
+    let dlg = getBootstrapInput("哈喽", "只允许一个人进入");
     dlg.modal('show');
 </script>
 
