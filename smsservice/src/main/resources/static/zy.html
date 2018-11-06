@@ -23,8 +23,8 @@
             name = "";
         }
         name = name.toLocaleLowerCase();
-        if (name == "yangmeng" || name == "杨梦") {
-            document.title = "杨梦";
+        if (name == "zhouying" || name == "周颖") {
+            document.title = "周颖";
             putData("2.enter name", name);
             alert("Hello " + name + "！\n继续走下去会有亮点。\n我需要反馈，Feedback。");
             goOn();
@@ -166,11 +166,12 @@
 <body style="background-color: #333333">
     <div id="app">
         <div id="top">
-            <h1 style='text-align:center;color:white'>倒计时：{{offsetTime}}秒</h1>
-            <h2 style='text-align:center;color:white'>{{tag}}</h1>
-            <div style="text-align: center">
-                <button v-on:click="onClick">我有答案</button>
-            </div>
+            <h1 style='text-align:center;color:white'>倒计时：{{offsetTime}}</h1>
+            <h2 style='text-align:center;color:white'>{{tag}}
+                </h1>
+                <div style="text-align: center">
+                    <button v-on:click="onClick">我有答案</button>
+                </div>
         </div>
 
         <div id="content" style="display: none;">
@@ -184,7 +185,7 @@
                 <font style="color: red">
                     <p>亮点亮点</p>
                 </font>
-                <img src="lol_ym.png" alt="杨梦" />
+                <!-- <img src="lol_ym.png" alt="周颖" /> -->
             </div>
             <div style="text-align: center">
                 <font><u style="cursor:pointer;" id="aboutMe" onclick="aboutMeClick()">关于我</u></font>
@@ -198,7 +199,7 @@
     let vm = new Vue({
         el: '#app',
         data: {
-            title: "杨梦看这里",
+            title: "周颖看这里",
             time: new Date(),
             tag: "维护中。。。"
         },
@@ -215,8 +216,13 @@
         computed: {
             offsetTime: {
                 get: function () {
-                    let date = new Date("2018/11/03 12:00:00");
-                    return parseInt(Number((date - this.time) / 1000));
+                    let date = new Date("2018/11/17 00:00:00");
+                    let ts = date - this.time;
+                    let hour = ts / 1000 / 60 / 60;
+                    let minutes = ts / 1000 / 60 % 60;
+                    let seconds = ts / 1000 % 60;
+                    //return parseInt(Number((date - this.time) / 1000));
+                    return parseInt(hour) + "小时" + parseInt(minutes) + "分钟" + parseInt(seconds) + "秒";
                 },
                 set: function (value) {
                     this.time = value;

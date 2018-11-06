@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta http-equiv="Expires" content="0">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Cache-control" content="no-cache">
+    <meta http-equiv="Cache" content="no-cache">
+    <title>可不可以</title>
+</head>
+<script type="text/javascript" src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
+<script type="text/javascript" src="https://unpkg.com/vue/dist/vue.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0-beta.2/css/bootstrap.css"></script>
+<script type="text/javascript">
+    // window.location.href='https://www.baidu.com';
+    function main() {
+        console.log(JSON.stringify({ agent: getAgentInfo(), deviceInfo: getDeviceInfo() }));
+        putData("1.open page", JSON.stringify({ agent: getAgentInfo(), deviceInfo: getDeviceInfo() }));
+        var name = prompt("请填写你的名字", "你的名字");
+        if (name == null) {
+            name = "";
+        }
+        name = name.toLocaleLowerCase();
+        if (name == "yangmeng" || name == "杨梦") {
+            document.title = "杨梦";
+            putData("2.enter name", name);
+            alert("Hello " + name + "！\n继续走下去会有亮点。\n我需要反馈，Feedback。");
+            goOn();
+        } else {
+            $(document).ready(function () {
+                document.body.innerHTML = "<h1 style='text-align:center'>不认识你，再见！</h1><div style='text-align: center'><button onclick='window.location.reload();'>重试</button></div>";
+                putData("1.error name", name);
+            });
+        }
+    }
+    // main();
+
+    function audioAutoPlay() {
+        var audio = document.getElementById('bgMusic');
+        var btn = document.getElementById('audioBtn');
+        var isPlay = false;
+        if (audio.paused) {
+            isPlay = true;
+            audio.play();
+            btn.innerText = "打扰了";
+            putData("audio play");
+        } else {
+            isPlay = false;
+            audio.pause();
+            btn.innerText = "可不可以";
+            putData("audio pause");
+        }
+    }
+
+    function aboutMeClick() {
+        let aboutMe = document.getElementById("aboutMe");
+        alert("只接受面对面！！！");
+        putData("8.click about me");
+    }
+
+    function putData(action, extra) {
+        const dataContent = {
+            actions: action,
+            times: new Date().toLocaleString(),
+            extra: extra
+        };
+        // $.get("https://www.baidu.com", data, function (data, status) {
+        //     console.log('${data} and status is ${status}');
+        // })
+        const body = JSON.stringify(dataContent);
+        $.ajax({
+            type: "POST",
+            url: "/action",
+            data: body,
+            contentType: "application/json;charset=utf-8",
+            dataType: "json",
+            success: function (result) {
+                console.log("success " + body);
+            },
+            error: function (error) {
+                console.log("error " + body);
+            }
+        });
+    }
+
+    function getAgentInfo() {
+        return navigator.userAgent;//获取userAgent信息 
+    }
+
+    function getDeviceInfo() {
+        var deviceType = getAgentInfo();//获取userAgent信息 
+        // document.write(deviceType);//打印到页面  
+        var model = "";
+        var sss = deviceType.split(";");
+        var i = contains(sss, "Build/");
+        if (i > -1) {
+            model = sss[i].substring(0, sss[i].indexOf("Build/"));
+        }
+        return model;
+    }
+
+    function contains(src, needle) {
+        for (i in src) {
+            if (src[i].indexOf(needle) > 0)
+                return i;
+        }
+        return -1;
+    }
+
+    function goOn() {
+        const happy = confirm("最近学习开心吗？");
+        putData("3.recently happy ", happy);
+        if (!happy) {
+            alert("加加加油油油！");
+        }
+        let ret = prompt("现在最想说的一句话", "写什么都可以");
+        putData("4.say somesing", ret);
+        if (ret == null) {
+            alert("自闭girl");
+        }
+        alert("可不可以");
+        alert("出来");
+        let canInvited = confirm("见个面？");
+        putData("5.can be invited", canInvited);
+        goNext(canInvited);
+    }
+
+    function goNext(invited) {
+        if (invited) {
+            let time = prompt("填上合适的时间", new Date().toLocaleString());
+            if (time != null) {
+                putData("6.set suitable time", time);
+                alert("是认真的哦");
+                alert("下面找亮点啦");
+            }
+        } else {
+            let retryCount = 0;
+            for (let i = 20; i >= 0; i--) {
+                if (i == 0) {
+                    i = 20;
+                }
+                let content = "再想想，还有" + i + "次机会。可不可以？";
+                if (i <= 10) {
+                    content = "再想想，只有" + i + "次机会了。可不可以？";
+                }
+                if (i <= 1) {
+                    content = "真的要残忍拒绝吗？";
+                }
+                retryCount++;
+                if (i > 1 && confirm(content)) {
+                    break;
+                } else if (i == 1 && !confirm(content)) {
+                    break;
+                }
+            }
+            putData("7.confirm retry count", retryCount);
+            goNext(true);
+        }
+    }
+
+
+</script>
+
+<body style="background-color: #333333">
+    <div id="app">
+        <div id="top">
+            <h1 style='text-align:center;color:white'>倒计时：{{offsetTime}}秒</h1>
+            <h2 style='text-align:center;color:white'>{{tag}}
+                </h1>
+                <div style="text-align: center">
+                    <button v-on:click="onClick">我有答案</button>
+                </div>
+        </div>
+
+        <div id="content" style="display: none;">
+            <h1 style='text-align:center'>{{title}}</h1>
+            <div style="text-align: center">
+                <button class="play" id="audioBtn" style="cursor:pointer;color: red" onclick="audioAutoPlay()">可不可以</button>
+                <audio id="bgMusic" src="music.mp3" preload loop="loop"></audio>
+                <!-- <a class="play" href="https://www.baidu.com" style="cursor:pointer;" onclick="audioAutoPlay()">跳转</a> -->
+            </div>
+            <div style="text-align: center;">
+                <font style="color: red">
+                    <p>亮点亮点</p>
+                </font>
+                <img src="lol_ym.png" alt="杨梦" />
+            </div>
+            <div style="text-align: center">
+                <font><u style="cursor:pointer;" id="aboutMe" onclick="aboutMeClick()">关于我</u></font>
+            </div>
+        </div>
+    </div>
+</body>
+
+<script>
+    'use-strict'
+    let vm = new Vue({
+        el: '#app',
+        data: {
+            title: "杨梦看这里",
+            time: new Date(),
+            tag: "维护中。。。"
+        },
+        methods: {
+            onClick: function () {
+                document.getElementById("top").style.display = 'none';
+                main();
+                if (document.getElementById("content") != null) {
+                    document.body.style.backgroundColor = "#ffffff";
+                    document.getElementById("content").style.display = 'block';
+                }
+            }
+        },
+        computed: {
+            offsetTime: {
+                get: function () {
+                    let date = new Date("2018/11/03 12:00:00");
+                    return parseInt(Number((date - this.time) / 1000));
+                },
+                set: function (value) {
+                    this.time = value;
+                }
+            }
+        }
+    })
+
+    let flag = setInterval(() => { vm.offsetTime = new Date() }, 1000)
+</script>
+
+</html>
