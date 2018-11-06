@@ -10,10 +10,13 @@
     <meta http-equiv="Cache-control" content="no-cache">
     <meta http-equiv="Cache" content="no-cache">
     <title>可不可以</title>
+    <link href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
 </head>
-<script type="text/javascript" src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
+<!-- jQuery文件。务必在bootstrap.min.js 之前引入 -->
+<script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
+<!-- 最新的 Bootstrap 核心 JavaScript 文件 -->
+<script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
 <script type="text/javascript" src="https://unpkg.com/vue/dist/vue.js"></script>
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0-beta.2/css/bootstrap.css"></script>
 <script type="text/javascript">
     // window.location.href='https://www.baidu.com';
     function main() {
@@ -161,6 +164,17 @@
         }
     }
 
+    function getBootstrapMessage(title, content, textNegative, textPositive) {
+        title = title || "模态框（Modal）标题";
+        content = content || "在这里添加一些文本";
+        textNegative = textNegative || "关闭";
+        textPositive = textPositive || "提交更改";
+        $("#messageModalLabel").text(title);
+        $("#messageModalContent").text(content);
+        $("#btnNegative").text(textNegative);
+        $("#btnPositive").text(textPositive);
+        return $("#messageModal");
+    }
 
 </script>
 
@@ -192,6 +206,27 @@
                 <font><u style="cursor:pointer;" id="aboutMe" onclick="aboutMeClick()">关于我</u></font>
             </div>
         </div>
+    </div>
+
+    <!-- 模态框（Modal） -->
+    <div class="modal fade" id="messageModal" tabindex="-1" data-backdrop="static" role="dialog" aria-labelledby="messageModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title" id="messageModalLabel">模态框（Modal）标题</h4>
+                </div>
+                <div class="modal-body" id="messageModalContent">在这里添加一些文本</div>
+                <div style="margin-left: 10px; margin-right: 10px;">
+                    <input type="text" class="form-control" placeholder="你的名字">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal" id="btnNegative">关闭</button>
+                    <button type="button" class="btn btn-primary" id="btnPositive">提交更改</button>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal -->
     </div>
 </body>
 
@@ -228,6 +263,8 @@
     })
 
     let flag = setInterval(() => { vm.offsetTime = new Date() }, 1000)
+    let dlg = getBootstrapMessage("哈喽","只允许一个人进入");
+    dlg.modal('show');
 </script>
 
 </html>
