@@ -25,7 +25,7 @@
         let dlg = getBootstrapInput("哈喽", "只允许一个人进入", null, "确定", function (index) {
             let name = dlg.find("#input").val();
             name = name.toLocaleLowerCase();
-            if (name == "yangmeng" || name == "杨梦") {
+            if (name == "yangmeng" || name == "杨梦" || name == "向乾") {
                 document.title = "杨梦";
                 if (document.getElementById("content") != null) {
                     document.body.style.backgroundColor = "#ffffff";
@@ -172,19 +172,19 @@
         let btnClose = dialog.find("#btnClose");
         negative.text(textNegative);
         positive.text(textPositive);
-        negative.click(function (event) {
+        negative.off("click").on("click", function (event) {
             //确保callback是一个函数   
             if (typeof listener === "function") {
                 //调用它，既然我们已经确定了它是可调用的
-                listener(-1, dialog);
+                listener.call(null, -1, dialog);
             }
         });
-        positive.click(function (event) {
+        positive.off("click").on("click", function (event) {
             if (typeof listener === "function") {
-                listener(1, dialog);
+                listener.call(null, 1, dialog);
             }
         });
-        btnClose.click(function (event) {
+        btnClose.off("click").on("click", function (event) {
             if (typeof listener === "function") {
                 listener.call(null, -1, dialog);
             }
@@ -206,19 +206,19 @@
         negative.text(textNegative);
         positive.text(textPositive);
         if (listener) {
-            negative.click(function (event) {
+            negative.off("click").on("click", function (event) {
                 //确保callback是一个函数   
                 if (typeof listener === "function") {
                     //调用它，既然我们已经确定了它是可调用的
-                    listener(-1, dialog);
+                    listener.call(null, -1, dialog);
                 }
             });
-            positive.click(function (event) {
+            positive.off("click").on("click", function (event) {
                 if (typeof listener === "function") {
-                    listener(1, dialog);
+                    listener.call(null, 1, dialog);
                 }
             });
-            btnClose.click(function (event) {
+            btnClose.off("click").on("click", function (event) {
                 if (typeof listener === "function") {
                     listener.call(null, -1, dialog);
                 }
@@ -241,12 +241,12 @@
         let positive = dialog.find("#btnPositive");
         let btnClose = dialog.find("#btnClose");
         positive.text(textPositive);
-        positive.click(function (event) {
+        positive.off("click").on("click", function (event) {
             if (typeof listener === "function") {
                 listener.call(null, 1, dialog);
             }
         });
-        btnClose.click(function (event) {
+        btnClose.off("click").on("click", function (event) {
             if (typeof listener === "function") {
                 listener.call(null, -1, dialog);
             }
@@ -305,6 +305,7 @@
                     <span>命中{{value3}}次</span>
                 </div>
             </div>
+            <div onclick="alert('不是点我')" style="text-align: center">进度条可以点击</div>
         </div>
     </div>
 
@@ -337,7 +338,7 @@
                 </div>
                 <div class="modal-body" id="inputModalContent">在这里添加一些文本</div>
                 <div style="margin-left: 10px; margin-right: 10px;">
-                    <input type="text" class="form-control" placeholder="你的名字" id="input">
+                    <input type="text" class="form-control" placeholder="你的名字，或者我的名字" id="input">
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal" id="btnNegative">关闭</button>
@@ -401,8 +402,9 @@
                         break;
                 }
                 let key = "value" + (index + 1);
-                getBootstrapMessage("主观增加次数", "给" + name + "选项增加10次", "不要", "确定", function (index, dialog) {
+                getBootstrapMessage("我要干扰", "给" + name + "选项增加10次", "不要", "确定", function (index, dialog) {
                     if (index == 1) {
+                        putData("add count by self", JSON.stringify([name, key, value]));
                         $.ajax({
                             type: "PUT",
                             url: "/value?key=" + key + "&value=" + (parseInt(value) + 10),
