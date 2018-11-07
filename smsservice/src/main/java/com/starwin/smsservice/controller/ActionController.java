@@ -32,4 +32,10 @@ public class ActionController {
         Value ret = actionService.getParams(key);
         return new CommonResult<>("0", "success", ret);
     }
+
+    @RequestMapping(value = "/value/all", method = {RequestMethod.GET})
+    public CommonResult getAllParam() {
+        List<Value> ret = actionService.getAllParams();
+        return new CommonResult<>("0", "success", ret);
+    }
 }

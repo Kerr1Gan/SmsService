@@ -38,4 +38,9 @@ public class ActionServiceImpl implements ActionService {
     public Value getParams(String key) {
         return mapper.getValue(key);
     }
+
+    @Override
+    public List<Value> getAllParams() {
+        return mapper.getAllValue();
+    }
 }

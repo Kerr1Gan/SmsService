@@ -5,6 +5,8 @@ import com.starwin.smsservice.entity.Value;
 import org.apache.ibatis.annotations.*;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
+
 @Mapper
 @Component
 public interface ActionMapper {
@@ -23,4 +25,7 @@ public interface ActionMapper {
 
     @Select({"select * from table_values where _key = #{key}"})
     Value getValue(@Param(value = "key") String key);
+
+    @Select({"select * from table_values"})
+    List<Value> getAllValue();
 }
