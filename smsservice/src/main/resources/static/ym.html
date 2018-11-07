@@ -266,20 +266,6 @@
             </div>
         </div>
 
-        <!-- <div id="content" style="display: none;">
-            <h1 style='text-align:center'>{{title}}</h1>
-            <div style="text-align: center">
-                <button class="play" id="audioBtn" style="cursor:pointer;color: red" onclick="audioAutoPlay()">可不可以</button>
-                <audio id="bgMusic" src="music.mp3" preload loop="loop"></audio>
-            </div>
-            <div style="text-align: center;">
-                <p style="color: red">亮点亮点</p>
-                <img src="lol_ym.png" alt="杨梦" />
-            </div>
-            <div style="text-align: center">
-                <u style="cursor:pointer;" id="aboutMe" onclick="aboutMeClick()">关于我</u>
-            </div>
-        </div> -->
         <div id="content" style="display: none;">
             <div style="float: left;">海洋馆：</div>
             <div class="progress progress-striped active" v-on:click="progressBarClick(0)" style="margin-right: 10px;">
@@ -306,6 +292,9 @@
                 </div>
             </div>
             <div onclick="alert('不是点我')" style="text-align: center">进度条可以点击</div>
+            <div v-on:click="secreteClick" style="text-align: center">
+                <button type="button" class="btn btn-primary" id="btnPositive">一个秘密</button>
+            </div>
         </div>
     </div>
 
@@ -431,6 +420,28 @@
                     }
                 }
                 return parseInt((times / (max * 2 * 2 / 3)) * 100);
+            },
+            secreteClick: function () {
+                getBootstrapAlert("我的秘密", "%E6%88%91%E5%96%9C%E6%AC%A2%E4%BD%A0", "解析", (index, dialog) => {
+                    if (index == 1) {
+                        let secret = "我喜欢你";
+                        let length = secret.length;
+                        let content = dialog.find("#alertModalContent");
+                        let i = 0;
+                        let timer = setInterval(() => {
+                            let prefix = secret.substring(0, i);
+                            let suffix = secret.substring(i, length);
+                            content.text(prefix + encodeURIComponent(suffix));
+                            i++;
+                            if (i > length) {
+                                clearInterval(timer);
+                                return;
+                            }
+                        }, 1000);
+                    } else {
+                        dialog.modal("hide");
+                    }
+                }).modal("show");
             }
         },
         computed: {
