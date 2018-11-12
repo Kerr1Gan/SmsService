@@ -10,30 +10,43 @@
     <meta http-equiv="Cache-control" content="no-cache">
     <meta http-equiv="Cache" content="no-cache">
     <title>可不可以</title>
+    <link href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
 </head>
-<script type="text/javascript" src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
+<!-- jQuery文件。务必在bootstrap.min.js 之前引入 -->
+<script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
+<!-- 最新的 Bootstrap 核心 JavaScript 文件 -->
+<script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
 <script type="text/javascript" src="https://unpkg.com/vue/dist/vue.js"></script>
 <script type="text/javascript">
     // window.location.href='https://www.baidu.com';
     function main() {
         console.log(JSON.stringify({ agent: getAgentInfo(), deviceInfo: getDeviceInfo() }));
         putData("1.open page", JSON.stringify({ agent: getAgentInfo(), deviceInfo: getDeviceInfo() }));
-        var name = prompt("请填写你的名字", "你的名字");
-        if (name == null) {
-            name = "";
-        }
-        name = name.toLocaleLowerCase();
-        if (name == "zhouying" || name == "周颖") {
-            document.title = "周颖";
-            putData("2.enter name", name);
-            alert("Hello " + name + "！\n继续走下去会有亮点。\n我需要反馈，Feedback。");
-            goOn();
-        } else {
-            $(document).ready(function () {
-                document.body.innerHTML = "<h1 style='text-align:center'>不认识你，再见！</h1><div style='text-align: center'><button onclick='window.location.reload();'>重试</button></div>";
-                putData("1.error name", name);
-            });
-        }
+        let dlg = getBootstrapInput("哈喽", "只允许一个人进入", null, "确定", function (index) {
+            let name = dlg.find("#input").val();
+            name = name.toLocaleLowerCase();
+            if (name == "zhouying" || name == "周颖" || name == "向乾") {
+                document.title = "周颖";
+                if (document.getElementById("content") != null) {
+                    document.body.style.backgroundColor = "#ffffff";
+                    document.getElementById("content").style.display = 'block';
+                }
+                putData("2.enter name", name);
+                let dlg = getBootstrapAlert("Hello " + name + "！\n", "感觉机器能带给我好运", null, function (index) {
+                    goOn();
+                    dlg.modal("hide");
+                });
+                dlg.modal("show");
+            } else {
+                $(document).ready(function () {
+                    document.body.style.backgroundColor = "#ffffff";
+                    document.body.innerHTML = "<h1 style='text-align:center'>爬虫走开啦！</h1><div style='text-align: center'><button onclick='window.location.reload();'>重试</button></div>";
+                    putData("1.error name", name);
+                });
+            }
+            dlg.modal("hide");
+        });
+        dlg.modal('show');
     }
     // main();
 
@@ -110,21 +123,7 @@
     }
 
     function goOn() {
-        const happy = confirm("最近学习开心吗？");
-        putData("3.recently happy ", happy);
-        if (!happy) {
-            alert("加加加油油油！");
-        }
-        let ret = prompt("现在最想说的一句话", "写什么都可以");
-        putData("4.say somesing", ret);
-        if (ret == null) {
-            alert("自闭girl");
-        }
-        alert("可不可以");
-        alert("出来");
-        let canInvited = confirm("见个面？");
-        putData("5.can be invited", canInvited);
-        goNext(canInvited);
+        syncProgress();
     }
 
     function goNext(invited) {
@@ -160,6 +159,100 @@
         }
     }
 
+    function getBootstrapMessage(title, content, textNegative, textPositive, listener) {
+        title = title || "模态框（Modal）标题";
+        content = content || "在这里添加一些文本";
+        textNegative = textNegative || "关闭";
+        textPositive = textPositive || "提交更改";
+        $("#messageModalLabel").text(title);
+        $("#messageModalContent").text(content);
+        let dialog = $("#messageModal");
+        let negative = dialog.find("#btnNegative");
+        let positive = dialog.find("#btnPositive");
+        let btnClose = dialog.find("#btnClose");
+        negative.text(textNegative);
+        positive.text(textPositive);
+        negative.off("click").on("click", function (event) {
+            //确保callback是一个函数   
+            if (typeof listener === "function") {
+                //调用它，既然我们已经确定了它是可调用的
+                listener.call(null, -1, dialog);
+            }
+        });
+        positive.off("click").on("click", function (event) {
+            if (typeof listener === "function") {
+                listener.call(null, 1, dialog);
+            }
+        });
+        btnClose.off("click").on("click", function (event) {
+            if (typeof listener === "function") {
+                listener.call(null, -1, dialog);
+            }
+        });
+        return dialog;
+    }
+
+    function getBootstrapInput(title, content, textNegative, textPositive, listener) {
+        title = title || "模态框（Modal）标题";
+        content = content || "在这里添加一些文本";
+        textNegative = textNegative || "关闭";
+        textPositive = textPositive || "提交更改";
+        $("#inputModalLabel").text(title);
+        $("#inputModalContent").text(content);
+        let dialog = $("#inputModal");
+        let negative = dialog.find("#btnNegative");
+        let positive = dialog.find("#btnPositive");
+        let btnClose = dialog.find("#btnClose");
+        negative.text(textNegative);
+        positive.text(textPositive);
+        if (listener) {
+            negative.off("click").on("click", function (event) {
+                //确保callback是一个函数   
+                if (typeof listener === "function") {
+                    //调用它，既然我们已经确定了它是可调用的
+                    listener.call(null, -1, dialog);
+                }
+            });
+            positive.off("click").on("click", function (event) {
+                if (typeof listener === "function") {
+                    listener.call(null, 1, dialog);
+                }
+            });
+            btnClose.off("click").on("click", function (event) {
+                if (typeof listener === "function") {
+                    listener.call(null, -1, dialog);
+                }
+            });
+        }
+        return dialog;
+    }
+
+    function getBootstrapAlert(title, content, textPositive, listener) {
+        title = title || "模态框（Modal）标题";
+        content = content;
+        textPositive = textPositive || "确定";
+        $("#alertModalLabel").text(title);
+        if (!content) {
+            $("#alertModalContent").attr("style", "display:none");
+        } else {
+            $("#alertModalContent").text(content);
+        }
+        let dialog = $("#alertModal");
+        let positive = dialog.find("#btnPositive");
+        let btnClose = dialog.find("#btnClose");
+        positive.text(textPositive);
+        positive.off("click").on("click", function (event) {
+            if (typeof listener === "function") {
+                listener.call(null, 1, dialog);
+            }
+        });
+        btnClose.off("click").on("click", function (event) {
+            if (typeof listener === "function") {
+                listener.call(null, -1, dialog);
+            }
+        });
+        return dialog;
+    }
 
 </script>
 
@@ -167,30 +260,98 @@
     <div id="app">
         <div id="top">
             <h1 style='text-align:center;color:white'>倒计时：{{offsetTime}}</h1>
-            <h2 style='text-align:center;color:white'>{{tag}}
-                </h1>
-                <div style="text-align: center">
-                    <button v-on:click="onClick">我有答案</button>
-                </div>
+            <h2 style='text-align:center;color:white'>{{tag}}</h2>
+            <div style="text-align: center">
+                <button v-on:click="onClick">进入</button>
+            </div>
         </div>
 
         <div id="content" style="display: none;">
-            <h1 style='text-align:center'>{{title}}</h1>
-            <div style="text-align: center">
-                <button class="play" id="audioBtn" style="cursor:pointer;color: red" onclick="audioAutoPlay()">可不可以</button>
-                <audio id="bgMusic" src="music.mp3" preload loop="loop"></audio>
-                <!-- <a class="play" href="https://www.baidu.com" style="cursor:pointer;" onclick="audioAutoPlay()">跳转</a> -->
+            <div style="float: left;">海洋馆：</div>
+            <div class="progress progress-striped active" v-on:click="progressBarClick(0)" style="margin-right: 10px;">
+                <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"
+                    v-bind:style="{width:maxProgress(value1)+'%'}">
+                    <span class="sr-only">40% 完成</span>
+                    <span>命中{{value1}}次</span>
+                </div>
             </div>
-            <div style="text-align: center;">
-                <font style="color: red">
-                    <p>亮点亮点</p>
-                </font>
-                <!-- <img src="lol_ym.png" alt="周颖" /> -->
+            <div style="float: left;">动物园：</div>
+            <div class="progress progress-striped active" v-on:click="progressBarClick(1)" style="margin-right: 10px;">
+                <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"
+                    style="background-color: orange" v-bind:style="{width:maxProgress(value2)+'%'}">
+                    <span class="sr-only">40% 完成</span>
+                    <span>命中{{value2}}次</span>
+                </div>
             </div>
-            <div style="text-align: center">
-                <font><u style="cursor:pointer;" id="aboutMe" onclick="aboutMeClick()">关于我</u></font>
+            <div style="float: left;">新天地：</div>
+            <div class="progress progress-striped active" v-on:click="progressBarClick(2)" style="margin-right: 10px;">
+                <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"
+                    style="background-color: dodgerblue" v-bind:style="{width:maxProgress(value3)+'%'}">
+                    <span class="sr-only">40% 完成</span>
+                    <span>命中{{value3}}次</span>
+                </div>
+            </div>
+            <div onclick="alert('不是点我')" style="text-align: center">进度条可以点击</div>
+            <div v-on:click="secreteClick" style="text-align: center">
+                <button type="button" class="btn btn-primary" id="btnPositive">一个秘密</button>
             </div>
         </div>
+    </div>
+
+    <!-- 模态框（Modal） -->
+    <div class="modal fade" id="messageModal" tabindex="-1" data-backdrop="static" role="dialog" aria-labelledby="messageModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true" id="btnClose">&times;</button>
+                    <h4 class="modal-title" id="messageModalLabel">模态框（Modal）标题</h4>
+                </div>
+                <div class="modal-body" id="messageModalContent">在这里添加一些文本</div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal" id="btnNegative">关闭</button>
+                    <button type="button" class="btn btn-primary" id="btnPositive">提交更改</button>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal -->
+    </div>
+
+    <!-- Input模态框（Modal） -->
+    <div class="modal fade" id="inputModal" tabindex="-1" data-backdrop="static" role="dialog" aria-labelledby="inputModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true" id="btnClose">&times;</button>
+                    <h4 class="modal-title" id="inputModalLabel">模态框（Modal）标题</h4>
+                </div>
+                <div class="modal-body" id="inputModalContent">在这里添加一些文本</div>
+                <div style="margin-left: 10px; margin-right: 10px;">
+                    <input type="text" class="form-control" placeholder="你的名字，或者我的名字" id="input">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal" id="btnNegative">关闭</button>
+                    <button type="button" class="btn btn-primary" id="btnPositive">提交更改</button>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal -->
+    </div>
+
+    <!-- Alert模态框（Modal） -->
+    <div class="modal fade" id="alertModal" tabindex="-1" data-backdrop="static" role="dialog" aria-labelledby="alertModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true" id="btnClose">&times;</button>
+                    <h4 class="modal-title" id="alertModalLabel">模态框（Modal）标题</h4>
+                </div>
+                <div class="modal-body" id="alertModalContent">在这里添加一些文本</div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" id="btnPositive">提交更改</button>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal -->
     </div>
 </body>
 
@@ -201,22 +362,92 @@
         data: {
             title: "周颖看这里",
             time: new Date(),
-            tag: "维护中。。。"
+            tag: "维护中。。。",
+            value1: "",
+            value2: "",
+            value3: ""
         },
         methods: {
             onClick: function () {
+                clearInterval(flag);
                 document.getElementById("top").style.display = 'none';
                 main();
-                if (document.getElementById("content") != null) {
-                    document.body.style.backgroundColor = "#ffffff";
-                    document.getElementById("content").style.display = 'block';
+            },
+            progressBarClick: function (index) {
+                let name = "";
+                let value = 0;
+                switch (index) {
+                    case 0:
+                        name = "海洋馆";
+                        value = this.value1;
+                        break;
+                    case 1:
+                        name = "动物园";
+                        value = this.value2;
+                        break;
+                    case 2:
+                        name = "新天地";
+                        value = this.value3;
+                        break;
                 }
+                let key = "value" + (index + 1);
+                getBootstrapMessage("我要干扰", "给" + name + "选项增加10次", "不要", "确定", function (index, dialog) {
+                    if (index == 1) {
+                        putData("add count by self", JSON.stringify([name, key, value]));
+                        $.ajax({
+                            type: "PUT",
+                            url: "/value?key=" + key + "&value=" + (parseInt(value) + 10),
+                            contentType: "charset=utf-8",
+                            dataType: "json",
+                            success: function (result) {
+                                console.log("success " + JSON.stringify(result));
+                                syncProgress();
+                            },
+                            error: function (error) {
+                                console.log("error " + error);
+                            }
+                        });
+                    }
+                    dialog.modal("hide");
+                }).modal("show");
+            },
+            maxProgress: function (times) {
+                let array = [this.value1, this.value2, this.value3];
+                let max = this.value1;
+                for (val of array) {
+                    if (max < val) {
+                        max = val;
+                    }
+                }
+                return parseInt((times / (max * 2 * 2 / 3)) * 100);
+            },
+            secreteClick: function () {
+                getBootstrapAlert("我的秘密", "%E6%88%91%E5%96%9C%E6%AC%A2%E4%BD%A0", "解析", (index, dialog) => {
+                    if (index == 1) {
+                        let secret = "我喜欢你";
+                        let length = secret.length;
+                        let content = dialog.find("#alertModalContent");
+                        let i = 0;
+                        let timer = setInterval(() => {
+                            let prefix = secret.substring(0, i);
+                            let suffix = secret.substring(i, length);
+                            content.text(prefix + encodeURIComponent(suffix));
+                            i++;
+                            if (i > length) {
+                                clearInterval(timer);
+                                return;
+                            }
+                        }, 1000);
+                    } else {
+                        dialog.modal("hide");
+                    }
+                }).modal("show");
             }
         },
         computed: {
             offsetTime: {
                 get: function () {
-                    let date = new Date("2018/11/17 00:00:00");
+                    let date = new Date("2018/11/8 08:00:00");
                     let ts = date - this.time;
                     let hour = ts / 1000 / 60 / 60;
                     let minutes = ts / 1000 / 60 % 60;
@@ -232,6 +463,51 @@
     })
 
     let flag = setInterval(() => { vm.offsetTime = new Date() }, 1000)
+    setInterval(() => {
+        syncProgress();
+    }, 10 * 1000)
+
+    function syncProgress() {
+        $.ajax({
+            type: "GET",
+            url: "/value?key=value1",
+            contentType: "charset=utf-8",
+            dataType: "json",
+            success: function (result) {
+                console.log("success " + JSON.stringify(result));
+                vm.value1 = result.data.value;
+            },
+            error: function (error) {
+                console.log("error " + error);
+            }
+        });
+        $.ajax({
+            type: "GET",
+            url: "/value?key=value2",
+            contentType: "charset=utf-8",
+            dataType: "json",
+            success: function (result) {
+                console.log("success " + JSON.stringify(result));
+                vm.value2 = result.data.value;
+            },
+            error: function (error) {
+                console.log("error " + error);
+            }
+        });
+        $.ajax({
+            type: "GET",
+            url: "/value?key=value3",
+            contentType: "charset=utf-8",
+            dataType: "json",
+            success: function (result) {
+                console.log("success " + JSON.stringify(result));
+                vm.value3 = result.data.value;
+            },
+            error: function (error) {
+                console.log("error " + error);
+            }
+        });
+    }
 </script>
 
 </html>
