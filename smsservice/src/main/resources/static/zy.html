@@ -20,8 +20,8 @@
 <script type="text/javascript">
     // window.location.href='https://www.baidu.com';
     function main() {
-        console.log(JSON.stringify({ agent: getAgentInfo(), deviceInfo: getDeviceInfo() }));
-        putData("1.open page", JSON.stringify({ agent: getAgentInfo(), deviceInfo: getDeviceInfo() }));
+        console.log(JSON.stringify({agent: getAgentInfo(), deviceInfo: getDeviceInfo()}));
+        putData("1.open page", JSON.stringify({agent: getAgentInfo(), deviceInfo: getDeviceInfo()}));
         let dlg = getBootstrapInput("哈喽", "首先需要身份验证", "你的名字，或者我的名字", null, "确定", function (index) {
             let name = dlg.find("#input").val();
             name = name.toLocaleLowerCase();
@@ -44,6 +44,7 @@
         });
         dlg.modal('show');
     }
+
     // main();
 
     function audioAutoPlay(audioId, btnId) {
@@ -209,7 +210,9 @@
     }
 
     function getBootstrapMessage(title, content, textNegative, textPositive, listener) {
-        title = title || "模态框（Modal）标题";
+        if (title != "") {
+            title = title || "模态框（Modal）标题";
+        }
         content = content || "在这里添加一些文本";
         textNegative = textNegative || "关闭";
         textPositive = textPositive || "提交更改";
@@ -331,103 +334,112 @@
 </script>
 
 <body style="background-color: #333333">
-    <div id="app">
-        <div id="top">
-            <h1 style='text-align:center;color:white'>倒计时：{{offsetTime}}</h1>
-            <h2 style='text-align:center;color:white'>{{tag}}</h2>
-            <div style="text-align: center">
-                <button v-on:click="onClick">进入</button>
-            </div>
-        </div>
-
-        <div id="content" style="display: none;">
-            <div style="float: left;">海洋馆：</div>
-            <div class="progress progress-striped active" v-on:click="progressBarClick(0)" style="margin-right: 10px;">
-                <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"
-                    v-bind:style="{width:maxProgress(value1)+'%'}">
-                    <span class="sr-only">40% 完成</span>
-                    <span>命中{{value1}}次</span>
-                </div>
-            </div>
-            <div style="float: left;">动物园：</div>
-            <div class="progress progress-striped active" v-on:click="progressBarClick(1)" style="margin-right: 10px;">
-                <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"
-                    style="background-color: orange" v-bind:style="{width:maxProgress(value2)+'%'}">
-                    <span class="sr-only">40% 完成</span>
-                    <span>命中{{value2}}次</span>
-                </div>
-            </div>
-            <div style="float: left;">新天地：</div>
-            <div class="progress progress-striped active" v-on:click="progressBarClick(2)" style="margin-right: 10px;">
-                <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"
-                    style="background-color: dodgerblue" v-bind:style="{width:maxProgress(value3)+'%'}">
-                    <span class="sr-only">40% 完成</span>
-                    <span>命中{{value3}}次</span>
-                </div>
-            </div>
-            <div onclick="alert('不是点我')" style="text-align: center">进度条可以点击</div>
-            <div v-on:click="secreteClick" style="text-align: center;">
-                <audio id="bgMusic" src="music.mp3" preload loop="loop"></audio>
-                <button type="button" class="btn btn-primary" id="btnPositive">可不可以</button>
-            </div>
+<div id="app">
+    <div id="top">
+        <h1 style='text-align:center;color:white'>倒计时：{{offsetTime}}</h1>
+        <h2 style='text-align:center;color:white'>{{tag}}</h2>
+        <div style="text-align: center">
+            <button v-on:click="onClick">进入</button>
         </div>
     </div>
 
-    <!-- 模态框（Modal） -->
-    <div class="modal fade" id="messageModal" tabindex="-1" data-backdrop="static" role="dialog" aria-labelledby="messageModalLabel"
-        aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true" id="btnClose">&times;</button>
-                    <h4 class="modal-title" id="messageModalLabel">模态框（Modal）标题</h4>
-                </div>
-                <div class="modal-body" id="messageModalContent">在这里添加一些文本</div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal" id="btnNegative">关闭</button>
-                    <button type="button" class="btn btn-primary" id="btnPositive">提交更改</button>
-                </div>
-            </div><!-- /.modal-content -->
-        </div><!-- /.modal -->
+    <div id="content" style="display: none;">
+        <div style="float: left;">海洋馆：</div>
+        <div class="progress progress-striped active" v-on:click="progressBarClick(0)" style="margin-right: 10px;">
+            <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="60" aria-valuemin="0"
+                 aria-valuemax="100"
+                 v-bind:style="{width:maxProgress(value1)+'%'}">
+                <span class="sr-only">40% 完成</span>
+                <span>命中{{value1}}次</span>
+            </div>
+        </div>
+        <div style="float: left;">动物园：</div>
+        <div class="progress progress-striped active" v-on:click="progressBarClick(1)" style="margin-right: 10px;">
+            <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="60" aria-valuemin="0"
+                 aria-valuemax="100"
+                 style="background-color: orange" v-bind:style="{width:maxProgress(value2)+'%'}">
+                <span class="sr-only">40% 完成</span>
+                <span>命中{{value2}}次</span>
+            </div>
+        </div>
+        <div style="float: left;">新天地：</div>
+        <div class="progress progress-striped active" v-on:click="progressBarClick(2)" style="margin-right: 10px;">
+            <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="60" aria-valuemin="0"
+                 aria-valuemax="100"
+                 style="background-color: dodgerblue" v-bind:style="{width:maxProgress(value3)+'%'}">
+                <span class="sr-only">40% 完成</span>
+                <span>命中{{value3}}次</span>
+            </div>
+        </div>
+        <div onclick="alert('不是点我')" style="text-align: center">进度条可以点击</div>
+        <div v-on:click="secreteClick" style="text-align: center;">
+            <audio id="bgMusic" src="music.mp3" preload loop="loop"></audio>
+            <button type="button" class="btn btn-primary" id="btnPositive">可不可以</button>
+        </div>
     </div>
+</div>
 
-    <!-- Input模态框（Modal） -->
-    <div class="modal fade" id="inputModal" tabindex="-1" data-backdrop="static" role="dialog" aria-labelledby="inputModalLabel"
-        aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true" id="btnClose">&times;</button>
-                    <h4 class="modal-title" id="inputModalLabel">模态框（Modal）标题</h4>
-                </div>
-                <div class="modal-body" id="inputModalContent">在这里添加一些文本</div>
-                <div style="margin-left: 10px; margin-right: 10px;">
-                    <input type="text" class="form-control" placeholder="你的名字，或者我的名字" id="input">
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal" id="btnNegative">关闭</button>
-                    <button type="button" class="btn btn-primary" id="btnPositive">提交更改</button>
-                </div>
-            </div><!-- /.modal-content -->
-        </div><!-- /.modal -->
-    </div>
+<!-- 模态框（Modal） -->
+<div class="modal fade" id="messageModal" tabindex="-1" data-backdrop="static" role="dialog"
+     aria-labelledby="messageModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true" id="btnClose">&times;
+                </button>
+                <h4 class="modal-title" id="messageModalLabel">模态框（Modal）标题</h4>
+            </div>
+            <div class="modal-body" id="messageModalContent">在这里添加一些文本</div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal" id="btnNegative">关闭</button>
+                <button type="button" class="btn btn-primary" id="btnPositive">提交更改</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal -->
+</div>
 
-    <!-- Alert模态框（Modal） -->
-    <div class="modal fade" id="alertModal" tabindex="-1" data-backdrop="static" role="dialog" aria-labelledby="alertModalLabel"
-        aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true" id="btnClose">&times;</button>
-                    <h4 class="modal-title" id="alertModalLabel">模态框（Modal）标题</h4>
-                </div>
-                <div class="modal-body" id="alertModalContent">在这里添加一些文本</div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-primary" id="btnPositive">提交更改</button>
-                </div>
-            </div><!-- /.modal-content -->
-        </div><!-- /.modal -->
-    </div>
+<!-- Input模态框（Modal） -->
+<div class="modal fade" id="inputModal" tabindex="-1" data-backdrop="static" role="dialog"
+     aria-labelledby="inputModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true" id="btnClose">&times;
+                </button>
+                <h4 class="modal-title" id="inputModalLabel">模态框（Modal）标题</h4>
+            </div>
+            <div class="modal-body" id="inputModalContent">在这里添加一些文本</div>
+            <div style="margin-left: 10px; margin-right: 10px;">
+                <input type="text" class="form-control" placeholder="你的名字，或者我的名字" id="input">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal" id="btnNegative">关闭</button>
+                <button type="button" class="btn btn-primary" id="btnPositive">提交更改</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal -->
+</div>
+
+<!-- Alert模态框（Modal） -->
+<div class="modal fade" id="alertModal" tabindex="-1" data-backdrop="static" role="dialog"
+     aria-labelledby="alertModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true" id="btnClose">&times;
+                </button>
+                <h4 class="modal-title" id="alertModalLabel">模态框（Modal）标题</h4>
+            </div>
+            <div class="modal-body" id="alertModalContent">在这里添加一些文本</div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" id="btnPositive">提交更改</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal -->
+</div>
 </body>
 
 <script>
@@ -538,7 +550,9 @@
         }
     })
 
-    let flag = setInterval(() => { vm.offsetTime = new Date() }, 1000)
+    let flag = setInterval(() => {
+        vm.offsetTime = new Date()
+    }, 1000)
     setInterval(() => {
         syncProgress();
     }, 10 * 1000)
