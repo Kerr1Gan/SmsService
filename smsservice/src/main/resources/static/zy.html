@@ -22,19 +22,19 @@
     function main() {
         console.log(JSON.stringify({ agent: getAgentInfo(), deviceInfo: getDeviceInfo() }));
         putData("1.open page", JSON.stringify({ agent: getAgentInfo(), deviceInfo: getDeviceInfo() }));
-        let dlg = getBootstrapInput("哈喽", "只允许一个人进入", null, "确定", function (index) {
+        let dlg = getBootstrapInput("哈喽", "首先需要身份验证", "你的名字，或者我的名字", null, "确定", function (index) {
             let name = dlg.find("#input").val();
             name = name.toLocaleLowerCase();
-            if (name == "zhouying" || name == "周颖" || name == "向乾") {
+            if (name == "zhouying" || name == "周颖" || name == "向乾" || name == "xiangqian") {
                 document.title = "周颖";
                 if (document.getElementById("content") != null) {
                     document.body.style.backgroundColor = "#ffffff";
                     document.getElementById("content").style.display = 'block';
                 }
                 putData("2.enter name", name);
-                let dlg = getBootstrapAlert("Hello " + name + "！\n", "感觉机器能带给我好运", null, function (index) {
-                    goOn();
+                let dlg = getBootstrapAlert("Hello " + name + "！\n", " 好像很久没见面了。", null, function (index) {
                     dlg.modal("hide");
+                    goOn();
                 });
                 dlg.modal("show");
             } else {
@@ -124,6 +124,55 @@
 
     function goOn() {
         syncProgress();
+        getBootstrapMessage("最近", "最近工作忙吗", "还行", "很忙", (index, dialog) => {
+            dialog.modal("hide");
+            if (index > 0) {
+                getBootstrapAlert("来自老年人的警告", "加加加油油油！！！", null, (index, dialog) => {
+                    dialog.modal("hide");
+                    clearBootstrapShadow();
+                    saySomeThing();
+                }).modal("show");
+            } else {
+                saySomeThing();
+            }
+        }).modal("show");
+    }
+
+    function saySomeThing() {
+        getBootstrapInput("现在最想说的一句话", "随便什么都可以", null, "", "确定", (index, dialog) => {
+            let words = dialog.find("#input").val();
+            putData("3.say something", words);
+            dialog.modal("hide");
+            makeADate();
+        }).modal("show");
+    }
+
+    function makeADate() {
+        setTimeout(() => {
+            getBootstrapAlert("", "可不可以", null, (index, dialog) => {
+                dialog.modal("hide");
+                clearBootstrapShadow();
+                setTimeout(() => {
+                    getBootstrapAlert("", "出来", null, (index, dialog) => {
+                        dialog.modal("hide");
+                        setTimeout(() => {
+                            getBootstrapMessage("", "见个面？", null, null, (index, dialog) => {
+                                dialog.modal("hide");
+                                clearBootstrapShadow();
+                                if (index < 0) {
+                                    getBootstrapAlert("", "下次有机会记得告诉我。", null, (index, dialog) => {
+                                        dialog.modal("hide");
+                                        putData("5.make a date failed", "");
+                                    }).modal("show");
+                                } else {
+                                    goNext(true);
+                                }
+                            }).modal("show");
+                        }, 500);
+                    }).modal("show");
+                }, 500);
+            }).modal("show");
+        }, 500);
     }
 
     function goNext(invited) {
@@ -192,17 +241,35 @@
         return dialog;
     }
 
-    function getBootstrapInput(title, content, textNegative, textPositive, listener) {
+    function getBootstrapInput(title, content, placeHolder, textNegative, textPositive, listener) {
         title = title || "模态框（Modal）标题";
         content = content || "在这里添加一些文本";
-        textNegative = textNegative || "关闭";
-        textPositive = textPositive || "提交更改";
+        placeHolder = placeHolder || "";
+        if (textNegative != "") {
+            textNegative = textNegative || "关闭";
+        }
+        if (textPositive != null) {
+            textPositive = textPositive || "提交更改";
+        }
         $("#inputModalLabel").text(title);
         $("#inputModalContent").text(content);
         let dialog = $("#inputModal");
         let negative = dialog.find("#btnNegative");
         let positive = dialog.find("#btnPositive");
         let btnClose = dialog.find("#btnClose");
+        let input = dialog.find("#input");
+        input.attr("placeholder", placeHolder);
+        input.val("");
+        if (textNegative == "") {
+            negative.attr("style", "display:none");
+        } else {
+            negative.attr("style", "display:inline");
+        }
+        if (textPositive == "") {
+            positive.attr("style", "display:none");
+        } else {
+            positive.attr("style", "display:inline");
+        }
         negative.text(textNegative);
         positive.text(textPositive);
         if (listener) {
@@ -228,13 +295,16 @@
     }
 
     function getBootstrapAlert(title, content, textPositive, listener) {
-        title = title || "模态框（Modal）标题";
+        if (title != "") {
+            title = title || "模态框（Modal）标题";
+        }
         content = content;
         textPositive = textPositive || "确定";
         $("#alertModalLabel").text(title);
         if (!content) {
             $("#alertModalContent").attr("style", "display:none");
         } else {
+            $("#alertModalContent").attr("style", "display:block");
             $("#alertModalContent").text(content);
         }
         let dialog = $("#alertModal");
@@ -252,6 +322,10 @@
             }
         });
         return dialog;
+    }
+
+    function clearBootstrapShadow() {
+        $(".modal-backdrop").remove();
     }
 
 </script>
@@ -362,7 +436,7 @@
         data: {
             title: "周颖看这里",
             time: new Date(),
-            tag: "维护中。。。",
+            tag: "",
             value1: "",
             value2: "",
             value3: ""
@@ -447,7 +521,7 @@
         computed: {
             offsetTime: {
                 get: function () {
-                    let date = new Date("2018/11/8 08:00:00");
+                    let date = new Date("2018/11/17 00:00:00");
                     let ts = date - this.time;
                     let hour = ts / 1000 / 60 / 60;
                     let minutes = ts / 1000 / 60 % 60;
