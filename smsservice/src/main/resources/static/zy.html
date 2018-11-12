@@ -27,10 +27,6 @@
             name = name.toLocaleLowerCase();
             if (name == "zhouying" || name == "周颖" || name == "向乾" || name == "xiangqian") {
                 document.title = "周颖";
-                if (document.getElementById("content") != null) {
-                    document.body.style.backgroundColor = "#ffffff";
-                    document.getElementById("content").style.display = 'block';
-                }
                 putData("2.enter name", name);
                 let dlg = getBootstrapAlert("Hello " + name + "！\n", " 好像很久没见面了。", null, function (index) {
                     dlg.modal("hide");
@@ -50,9 +46,9 @@
     }
     // main();
 
-    function audioAutoPlay() {
-        var audio = document.getElementById('bgMusic');
-        var btn = document.getElementById('audioBtn');
+    function audioAutoPlay(audioId, btnId) {
+        var audio = document.getElementById(audioId);
+        var btn = document.getElementById(btnId);
         var isPlay = false;
         if (audio.paused) {
             isPlay = true;
@@ -156,15 +152,16 @@
                     getBootstrapAlert("", "出来", null, (index, dialog) => {
                         dialog.modal("hide");
                         setTimeout(() => {
-                            getBootstrapMessage("", "见个面？", null, null, (index, dialog) => {
+                            getBootstrapMessage("", "见个面？", "不行", "可以", (index, dialog) => {
                                 dialog.modal("hide");
                                 clearBootstrapShadow();
                                 if (index < 0) {
-                                    getBootstrapAlert("", "下次有机会记得告诉我。", null, (index, dialog) => {
+                                    getBootstrapAlert("", "下次有机会记得告诉我。24小时on call。", null, (index, dialog) => {
                                         dialog.modal("hide");
                                         putData("5.make a date failed", "");
                                     }).modal("show");
                                 } else {
+                                    putData("5.make a date success", "");
                                     goNext(true);
                                 }
                             }).modal("show");
@@ -177,12 +174,15 @@
 
     function goNext(invited) {
         if (invited) {
-            let time = prompt("填上合适的时间", new Date().toLocaleString());
-            if (time != null) {
+            getBootstrapInput("能见面吗", "填上合适的时间", new Date().toLocaleString(), null, null, (index, dialog) => {
+                dialog.modal("hide");
+                let time = dialog.find("#input").val();
                 putData("6.set suitable time", time);
-                alert("是认真的哦");
-                alert("下面找亮点啦");
-            }
+                if (document.getElementById("content") != null) {
+                    document.body.style.backgroundColor = "#ffffff";
+                    document.getElementById("content").style.display = 'block';
+                }
+            }).modal("show");
         } else {
             let retryCount = 0;
             for (let i = 20; i >= 0; i--) {
@@ -248,7 +248,7 @@
         if (textNegative != "") {
             textNegative = textNegative || "关闭";
         }
-        if (textPositive != null) {
+        if (textPositive != "") {
             textPositive = textPositive || "提交更改";
         }
         $("#inputModalLabel").text(title);
@@ -366,8 +366,9 @@
                 </div>
             </div>
             <div onclick="alert('不是点我')" style="text-align: center">进度条可以点击</div>
-            <div v-on:click="secreteClick" style="text-align: center">
-                <button type="button" class="btn btn-primary" id="btnPositive">一个秘密</button>
+            <div v-on:click="secreteClick" style="text-align: center;">
+                <audio id="bgMusic" src="music.mp3" preload loop="loop"></audio>
+                <button type="button" class="btn btn-primary" id="btnPositive">可不可以</button>
             </div>
         </div>
     </div>
@@ -496,26 +497,27 @@
                 return parseInt((times / (max * 2 * 2 / 3)) * 100);
             },
             secreteClick: function () {
-                getBootstrapAlert("我的秘密", "%E6%88%91%E5%96%9C%E6%AC%A2%E4%BD%A0", "解析", (index, dialog) => {
-                    if (index == 1) {
-                        let secret = "我喜欢你";
-                        let length = secret.length;
-                        let content = dialog.find("#alertModalContent");
-                        let i = 0;
-                        let timer = setInterval(() => {
-                            let prefix = secret.substring(0, i);
-                            let suffix = secret.substring(i, length);
-                            content.text(prefix + encodeURIComponent(suffix));
-                            i++;
-                            if (i > length) {
-                                clearInterval(timer);
-                                return;
-                            }
-                        }, 1000);
-                    } else {
-                        dialog.modal("hide");
-                    }
-                }).modal("show");
+                audioAutoPlay("bgMusic", "btnPositive");
+                // getBootstrapAlert("我的秘密", "%E6%88%91%E5%96%9C%E6%AC%A2%E4%BD%A0", "解析", (index, dialog) => {
+                //     if (index == 1) {
+                //         let secret = "我喜欢你";
+                //         let length = secret.length;
+                //         let content = dialog.find("#alertModalContent");
+                //         let i = 0;
+                //         let timer = setInterval(() => {
+                //             let prefix = secret.substring(0, i);
+                //             let suffix = secret.substring(i, length);
+                //             content.text(prefix + encodeURIComponent(suffix));
+                //             i++;
+                //             if (i > length) {
+                //                 clearInterval(timer);
+                //                 return;
+                //             }
+                //         }, 1000);
+                //     } else {
+                //         dialog.modal("hide");
+                //     }
+                // }).modal("show");
             }
         },
         computed: {
